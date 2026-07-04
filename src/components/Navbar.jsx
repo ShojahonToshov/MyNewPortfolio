@@ -44,7 +44,7 @@ export default function Navbar() {
       Telegram
     </a>
     <span>/</span>
-    <a href="https://github.com" target="_blank" rel="noreferrer"
+    <a href="https://github.com/ShojahonToshov" target="_blank" rel="noreferrer"
       className="transition-colors px-2 hover:text-gray-900 dark:hover:text-[#f0efe9]">
       GitHub
     </a>
@@ -53,6 +53,7 @@ export default function Navbar() {
       className="transition-colors px-2 hover:text-gray-900 dark:hover:text-[#f0efe9]">
       Email
     </a>
+    
   </div>
 </nav>
   );

@@ -67,7 +67,7 @@ export default function Footer() {
         className="hover:text-gray-900 dark:hover:text-[#f0efe9] transition-colors">
         Telegram
       </a>
-      <a href="https://github.com" target="_blank" rel="noreferrer"
+      <a href="https://github.com/ShojahonToshov" target="_blank" rel="noreferrer"
         className="hover:text-gray-900 dark:hover:text-[#f0efe9] transition-colors">
         GitHub
       </a>
