@@ -47,19 +47,19 @@ const skills = [
 
 export default function Sec1() {
   return (
-    <section id="about" className="bg-[#f5f5f3] dark:bg-[#1a1a17] rounded-[40px] py-[80px] px-[32px] md:px-[64px] shadow-sm">
+    <section id="about" className="bg-[#f5f5f3] rounded-[40px] py-[80px] px-[32px] md:px-[64px] shadow-sm">
   <div className="max-w-[1024px] mx-auto">
-    <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-[#6b7280] mb-[16px]">What I bring</p>
-    <h2 className="text-[30px] md:text-[36px] font-bold tracking-[-0.03em] text-gray-900 dark:text-[#f0efe9] mb-[64px]">
+    <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-[16px]">What I bring</p>
+    <h2 className="text-[30px] md:text-[36px] font-bold tracking-[-0.03em] text-gray-900 mb-[64px]">
       The value I deliver
     </h2>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[40px]">
       {skills.map((s) => (
         <div key={s.title} className="flex flex-col gap-[16px]">
-          <div className="text-gray-400 dark:text-[#6b7280]">{s.icon}</div>
-          <h3 className="font-bold text-gray-900 dark:text-[#f0efe9]">{s.title}</h3>
-          <p className="text-[14px] text-gray-400 dark:text-[#6b7280] leading-relaxed">{s.desc}</p>
+          <div className="text-gray-400">{s.icon}</div>
+          <h3 className="font-bold text-gray-900">{s.title}</h3>
+          <p className="text-[14px] text-gray-400 leading-relaxed">{s.desc}</p>
         </div>
       ))}
     </div>

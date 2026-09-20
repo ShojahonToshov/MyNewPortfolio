@@ -7,7 +7,7 @@ import Sec2 from "./components/Sec2";
 
 export default function App() {
   return (
-    <div className="min-h-screen p-[16px] md:p-[32px] lg:p-[40px] bg-[#e8e7e3] dark:bg-[#0f0f0d] transition-colors duration-300">
+    <div className="min-h-screen p-[16px] md:p-[32px] lg:p-[40px] bg-[#e8e7e3] transition-colors duration-300">
       <div className="max-w-[1152px] mx-auto flex flex-col gap-[20px]">
         <Hero />
         <Sec1/>
