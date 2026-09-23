@@ -1,82 +1,63 @@
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+
 export default function Footer() {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
+  const container = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start end", "end end"]
+  });
+
+  // Footer moves up slowly as you scroll
+  const y = useTransform(scrollYProgress, [0, 1], ["-150px", "0px"]);
 
   return (
-    <footer
-  id="contact"
-  className="bg-[#f5f5f3] rounded-[40px] pt-[80px] pb-[40px] px-[32px] md:px-[64px] shadow-sm"
->
-  {/* CTA block */}
-  <div className="text-center mb-[80px]">
-    <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-[24px]">
-      Let's work together
-    </p>
-
-    <h2 className="text-[36px] md:text-[60px] font-bold tracking-[-0.04em] text-gray-900 leading-[1.05] mb-[48px]">
-      Tell me about your
-      <br />
-      next project
-    </h2>
-
-    <div className="flex flex-col sm:flex-row justify-center gap-[12px]">
-      <a 
-        href="mailto:shojahon.toshov@gmail.com"
-        className="inline-flex items-center justify-center gap-[8px] bg-gray-900 text-white px-[40px] py-[16px] rounded-full font-bold text-[14px] hover:bg-gray-700 transition-colors"
+    <div ref={container} className="w-full relative bg-[#121415] overflow-hidden">
+      {/* Downward curve transition from previous section (static at the top) */}
+      <svg 
+        className="absolute top-0 left-0 w-full h-[8vw] fill-white z-20" 
+        viewBox="0 0 100 100" 
+        preserveAspectRatio="none"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
-          <rect x="2" y="4" width="20" height="16" rx="2" />
-        </svg>
-        Email me
-      </a>
+        <path d="M0 0 L100 0 L100 0 Q50 200 0 0 Z" />
+      </svg>
 
-      <a 
-        href="https://t.me/shojahon_toshov"
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center justify-center gap-[8px] bg-black/5 text-gray-700 px-[40px] py-[16px] rounded-full font-bold text-[14px] hover:bg-black/10 transition-colors"
+      <motion.footer
+        id="contact"
+        className="relative w-full text-white pt-[260px] pb-[40px] z-10"
+        style={{ y }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m22 2-7 20-4-9-9-4Z" />
-          <path d="M22 2 11 13" />
-        </svg>
-        Telegram
-      </a>
+        <div className="max-w-[1152px] mx-auto px-[24px] md:px-[40px] relative z-10">
+          <div className="flex flex-col items-center text-center mb-[100px]">
+            <h2 className="font-display text-[40px] md:text-[80px] font-bold tracking-tight mb-[32px] text-gray-400">
+              Have an idea?
+            </h2>
 
-      <a 
-        href="tel:+998914125808"
-        className="inline-flex items-center justify-center gap-[8px] bg-black/5 text-gray-700 px-[40px] py-[16px] rounded-full font-bold text-[14px] hover:bg-black/10 transition-colors"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.59a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-        </svg>
-        +998 91 412 58 08
-      </a>
+            <a
+              data-cursor="Let's Talk"
+              href="mailto:shojahon.toshov@gmail.com"
+              className="group relative inline-block overflow-hidden"
+            >
+              <span className="font-display text-[60px] md:text-[140px] font-extrabold tracking-tightest leading-none text-transparent transition-colors duration-500 group-hover:text-white" style={{ WebkitTextStroke: "2px rgba(255,255,255,0.2)" }}>
+                GET IN TOUCH
+              </span>
+              <div className="absolute left-0 bottom-0 w-full h-0 bg-white mix-blend-difference transition-all duration-500 group-hover:h-full z-[-1]" />
+            </a>
+          </div>
+
+          <div className="w-full h-[1px] bg-white/10 mb-[32px]" />
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-[16px] text-[12px] font-bold uppercase tracking-[0.15em] text-gray-400">
+            <p>© {year} Shojahon Toshov</p>
+            <div className="flex gap-[32px]">
+              <a href="https://t.me/shojahon_toshov" target="_blank" rel="noreferrer" className="hover:text-white transition-colors" data-cursor="Open">Telegram</a>
+              <a href="https://github.com/ShojahonToshov" target="_blank" rel="noreferrer" className="hover:text-white transition-colors" data-cursor="Open">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </motion.footer>
     </div>
-  </div>
-
-  {/* Divider */}
-  <div className="w-full h-[1px] bg-gray-200 mb-[32px]" />
-
-  {/* Bottom bar */}
-  <div className="flex flex-col md:flex-row justify-between items-center gap-[16px] text-[10px] font-bold uppercase tracking-[0.18em] text-gray-300">
-    <p>© {year} Shojahon Toshov. All rights reserved.</p>
-
-    <div className="flex gap-[24px]">
-      <a href="https://t.me/shojahon_toshov" target="_blank" rel="noreferrer"
-        className="hover:text-gray-900 transition-colors">
-        Telegram
-      </a>
-      <a href="https://github.com/ShojahonToshov" target="_blank" rel="noreferrer"
-        className="hover:text-gray-900 transition-colors">
-        GitHub
-      </a>
-      <a href="mailto:shojahon.toshov@gmail.com"
-        className="hover:text-gray-900 transition-colors">
-        Email
-      </a>
-    </div>
-  </div>
-</footer>
-  )
+  );
 }

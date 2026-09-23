@@ -1,3 +1,6 @@
+import { useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+
 const skills = [
   {
     icon: (
@@ -45,25 +48,82 @@ const skills = [
   },
 ]
 
+function SpotlightCard({ s }) {
+  const ref = useRef(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = (e) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  return (
+    <div 
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      className="group relative flex flex-col gap-[16px] p-6 rounded-3xl overflow-hidden border border-transparent hover:border-gray-200 transition-colors bg-white/50"
+    >
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: useTransform(
+            [mouseX, mouseY],
+            ([x, y]) => `radial-gradient(250px circle at ${x}px ${y}px, rgba(200, 200, 200, 0.4), transparent 80%)`
+          ),
+        }}
+      />
+      <div className="relative z-10 text-gray-400 group-hover:text-gray-900 transition-colors">{s.icon}</div>
+      <h3 className="relative z-10 font-bold text-gray-900">{s.title}</h3>
+      <p className="relative z-10 text-[14px] text-gray-500 leading-relaxed">{s.desc}</p>
+    </div>
+  );
+}
+
 export default function Sec1() {
   return (
-    <section id="about" className="bg-[#f5f5f3] rounded-[40px] py-[80px] px-[32px] md:px-[64px] shadow-sm">
-  <div className="max-w-[1024px] mx-auto">
-    <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-[16px]">What I bring</p>
-    <h2 className="text-[30px] md:text-[36px] font-bold tracking-[-0.03em] text-gray-900 mb-[64px]">
-      The value I deliver
-    </h2>
+    <section id="about" className="w-full bg-[#e8e7e3] py-[100px]">
+      <div className="max-w-[1152px] mx-auto px-[24px] md:px-[40px]">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
+          <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-[16px]">What I bring</p>
+          <h2 className="font-display text-[40px] md:text-[56px] font-bold tracking-tight text-gray-900 mb-[64px]">
+            The value I deliver
+          </h2>
+        </motion.div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[40px]">
-      {skills.map((s) => (
-        <div key={s.title} className="flex flex-col gap-[16px]">
-          <div className="text-gray-400">{s.icon}</div>
-          <h3 className="font-bold text-gray-900">{s.title}</h3>
-          <p className="text-[14px] text-gray-400 leading-relaxed">{s.desc}</p>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 }
+            }
+          }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[24px]"
+        >
+          {skills.map((s) => (
+            <motion.div 
+              key={s.title}
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+              }}
+            >
+              <SpotlightCard s={s} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   )
 }

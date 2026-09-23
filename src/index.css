@@ -2,7 +2,7 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: initial; /* Lenis handles this now */
   }
 
   body {
@@ -11,10 +11,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
+  @media (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
+  }
 }
 
 @layer utilities {
   .tracking-tightest {
     letter-spacing: -0.05em;
+  }
+  .font-display {
+    font-family: 'Syne', sans-serif;
   }
 }
