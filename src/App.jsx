@@ -1,22 +1,16 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 
-import Home from './pages/Home';
-import Variant1 from './pages/Variant1';
-import Variant2 from './pages/Variant2';
-import Variant3 from './pages/Variant3';
-import VariantSwitcher from './components/VariantSwitcher';
+const Home = lazy(() => import('./pages/Home'));
 
 export default function App() {
   return (
     <Router>
-      <VariantSwitcher />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/1" element={<Variant1 />} />
-        <Route path="/2" element={<Variant2 />} />
-        <Route path="/3" element={<Variant3 />} />
-      </Routes>
+      <Suspense fallback={<main className="p-12" role="status">Opening portfolio…</main>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

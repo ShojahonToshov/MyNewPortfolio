@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DZYN</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0a0a'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='white'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fira Sans Extra Condensed (display), JetBrains Mono (labels) and Inter (body)
+     all ship
+     Latin + Cyrillic, so UZ and RU render in exactly the same typefaces. Oswald
+     was dropped: its Cyrillic "Л" carries a detached foot that reads as a stray
+     full stop after letters with no baseline ink, such as "Г" and "Т". -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@500;700;800&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1790167364000">
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark">◆</span> DZYN<span class="logo-sup">®</span>
+    </a>
+    <nav class="nav">
+      <a href="#about" data-uz="Biz haqimizda" data-ru="О нас">Biz haqimizda</a>
+      <a href="#services" data-uz="Xizmatlar" data-ru="Услуги">Xizmatlar</a>
+      <a href="#process" data-uz="Jarayon" data-ru="Процесс">Jarayon</a>
+      <a href="#work" data-uz="Ishlar" data-ru="Работы">Ishlar</a>
+      <a href="/vibe" class="nav-vibe" data-uz="Vibe coding ↗" data-ru="Vibe coding ↗">Vibe coding ↗</a>
+      <a href="#contact" data-uz="Aloqa" data-ru="Контакты">Aloqa</a>
+    </nav>
+    <div class="header-right">
+      <div class="lang-switch" id="langSwitch">
+        <button class="lang-btn active" data-lang="uz">UZ</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+      <a href="#contact" class="btn btn-pill header-cta js-project-btn" data-uz="Loyihani boshlash ↗" data-ru="Начать проект ↗">Loyihani boshlash ↗</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Menyu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Yopish">✕</button>
+  <a href="#about" data-uz="Biz haqimizda" data-ru="О нас">Biz haqimizda</a>
+  <a href="#services" data-uz="Xizmatlar" data-ru="Услуги">Xizmatlar</a>
+  <a href="#process" data-uz="Jarayon" data-ru="Процесс">Jarayon</a>
+  <a href="#work" data-uz="Ishlar" data-ru="Работы">Ishlar</a>
+  <a href="/vibe" class="nav-vibe" data-uz="Vibe coding ↗" data-ru="Vibe coding ↗">Vibe coding ↗</a>
+  <a href="#contact" data-uz="Aloqa" data-ru="Контакты">Aloqa</a>
+  <div class="lang-switch lang-switch-mobile">
+    <button class="lang-btn active" data-lang="uz">UZ</button>
+    <button class="lang-btn" data-lang="ru">RU</button>
+  </div>
+  <a href="#contact" class="btn btn-solid mobile-menu-cta js-project-btn" data-uz="Loyihani boshlash ↗" data-ru="Начать проект ↗">Loyihani boshlash ↗</a>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-pin" id="heroPin">
+      <div class="hero-3d" id="hero3d"></div>
+      <div class="hero-meta">
+        <div>TASHKENT<br>41° 18' 52.1" N 69° 16' 44.5" E</div>
+        <div><span data-uz="Mahalliy vaqt" data-ru="Местное время">Mahalliy vaqt</span><br><span id="heroTime"></span></div>
+      </div>
+
+      <div class="container hero-inner">
+        <div class="reveal-fade badge">
+          <span class="dot"></span>
+          <span data-uz="Next-Gen Dizayn Agentligi" data-ru="Next-Gen Дизайн Агентство">Next-Gen Dizayn Agentligi</span>
+        </div>
+
+        <h1 class="hero-title-main">
+          <span class="line"><span class="reveal-line" data-uz="Arzon ko'rinmang." data-ru="Не выглядите<br>дёшево.">Arzon ko'rinmang.</span></span>
+        </h1>
+      </div>
+
+      <p class="hero-subtitle reveal-up" data-delay="1" data-uz="Qimmatroq sotadigan brending yaratamiz." data-ru="Создаём брендинг, который продаёт дороже.">Qimmatroq sotadigan brending yaratamiz.</p>
+
+      <div class="hero-stages" id="heroStages">
+        <div class="hero-stage" data-stage="1" data-uz="Toshkentda joylashgan" data-ru="Находимся в Ташкенте">Toshkentda joylashgan</div>
+        <div class="hero-stage" data-stage="2" data-uz="Dunyo bo'ylab ishlaymiz" data-ru="Работаем по всему миру">Dunyo bo'ylab ishlaymiz</div>
+        <div class="hero-stage" data-stage="3" data-uz="G'oyangizdan brendgacha" data-ru="От идеи до бренда">G'oyangizdan brendgacha</div>
+      </div>
+
+      <div class="scroll-hint reveal-fade" data-delay="3">
+        <span data-uz="Pastga skroll qiling" data-ru="Листайте вниз">Pastga skroll qiling</span>
+        <div class="scroll-line"><i></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO INTRO (scrolls in after the pinned hero releases) -->
+  <section class="hero-intro">
+    <div class="container hero-below">
+      <div class="hero-desc reveal-up" data-delay="1">
+        <p data-uz="Toshkentdagi dizayn agentligi — startaplardan yirik brendlargacha konvertatsiya qiluvchi interfeyslar, kuchli brend identifikatsiyasi va tez saytlar yaratamiz." data-ru="Дизайн-агентство из Ташкента — создаем конвертирующие интерфейсы, сильную айдентику и быстрые сайты для стартапов и крупных брендов.">Toshkentdagi dizayn agentligi — startaplardan yirik brendlargacha konvertatsiya qiluvchi interfeyslar, kuchli brend identifikatsiyasi va tez saytlar yaratamiz.</p>
+      </div>
+
+      <div class="hero-tags reveal-up" data-delay="2">
+        <span data-uz="UI/UX Dizayn" data-ru="UI/UX Дизайн">UI/UX Dizayn</span>
+        <span>Webflow</span>
+        <span data-uz="Brending" data-ru="Брендинг">Brending</span>
+        <span>No-Code</span>
+      </div>
+
+      <div class="hero-buttons reveal-up" data-delay="3">
+        <a href="#work" class="btn btn-solid" data-uz="Ishlarni ko'rish ↗" data-ru="Смотреть работы ↗">Ishlarni ko'rish ↗</a>
+        <a href="#contact" class="btn btn-outline js-project-btn" data-uz="Loyihani boshlash ↗" data-ru="Начать проект ↗">Loyihani boshlash ↗</a>
+      </div>
+
+      <div class="hero-fan" id="heroFan"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <section class="marquee-section">
+    <div class="container marquee-label reveal-up">
+      <span class="tick">✦</span>
+      <span data-uz="20+ doimiy mijozlar bilan ishlaymiz" data-ru="Работаем с 20+ постоянными клиентами">20+ doimiy mijozlar bilan ishlaymiz</span>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>VOLTA&nbsp;EV</span><span>NOMAD&nbsp;COFFEE</span><span>APEX&nbsp;FINANCE</span><span>SAID&nbsp;TRANSPORT</span><span>BLACK&nbsp;ENERGY</span><span>TOPSCORE</span><span>FAROBIY</span><span>DIGITAL&nbsp;FORUM</span>
+        <span>VOLTA&nbsp;EV</span><span>NOMAD&nbsp;COFFEE</span><span>APEX&nbsp;FINANCE</span><span>SAID&nbsp;TRANSPORT</span><span>BLACK&nbsp;ENERGY</span><span>TOPSCORE</span><span>FAROBIY</span><span>DIGITAL&nbsp;FORUM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT / STATS -->
+  <section class="about scrolly" id="about">
+   <div class="scrolly-pin">
+    <div class="container">
+      <div class="section-tag scrolly-step">
+        <i class="sq"></i>
+        <span data-uz="Biz kimmiz" data-ru="Кто мы">Biz kimmiz</span>
+      </div>
+      <h2 class="about-title scrolly-step"
+        data-uz='DZYN — bu Digitalverse jamoasining dizayn studiyasi. Biz <span class="text-ghost">tadqiqotdan</span> so&#39;nggi pikselgacha ishlaymiz — <em>ishonchli</em> brendlar uchun.'
+        data-ru='DZYN — дизайн-студия команды Digitalverse. Мы работаем <span class="text-ghost">от исследования</span> до финального пикселя — для <em>надёжных</em> брендов.'
+      >DZYN — bu Digitalverse jamoasining dizayn studiyasi. Biz <span class="text-ghost">tadqiqotdan</span> so'nggi pikselgacha ishlaymiz — <em>ishonchli</em> brendlar uchun.</h2>
+      <a href="#work" class="about-link scrolly-step" data-uz="→ Ishlarimizni ko'rish" data-ru="→ Смотреть наши работы">→ Ishlarimizni ko'rish</a>
+    </div>
+
+    <div class="container stats-grid-wrap">
+      <div class="stats-grid stats-grid-small">
+        <div class="stat scrolly-step">
+          <div class="stat-num" data-count="20">0+</div>
+          <div class="stat-label" data-uz="Doimiy mijozlar" data-ru="Постоянных клиентов">Doimiy mijozlar</div>
+        </div>
+        <div class="stat scrolly-step">
+          <div class="stat-num" data-count="5">0+</div>
+          <div class="stat-label" data-uz="Yillik tajriba" data-ru="Лет опыта">Yillik tajriba</div>
+        </div>
+        <div class="stat scrolly-step">
+          <div class="stat-num" data-count="50">0+</div>
+          <div class="stat-label" data-uz="Bajarilgan loyihalar" data-ru="Завершенных проектов">Bajarilgan loyihalar</div>
+        </div>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services scrolly section-invert" id="services">
+   <div class="scrolly-pin">
+    <div class="container">
+      <div class="section-tag scrolly-step light">
+        <i class="sq"></i>
+        <span data-uz="Xizmatlar" data-ru="Услуги">Xizmatlar</span>
+      </div>
+      <div class="services-head scrolly-step">
+        <h2 data-uz="Bizning xizmatlar" data-ru="Наши услуги">Bizning xizmatlar</h2>
+        <p data-uz="Tadqiqotdan ishga tushirishgacha — mahsulotingizni o'sishga tayyor qilamiz." data-ru="От исследования до запуска — готовим ваш продукт к росту.">Tadqiqotdan ishga tushirishgacha — mahsulotingizni o'sishga tayyor qilamiz.</p>
+      </div>
+
+      <div class="service-list">
+        <div class="service-row scrolly-step">
+          <span class="service-index">01</span>
+          <h3 data-uz="UI/UX Dizayn" data-ru="UI/UX Дизайн">UI/UX Dizayn</h3>
+          <span class="service-desc" data-uz="Konvertatsiya qiluvchi interfeyslar. Tadqiqotdan so'nggi pikselgacha." data-ru="Интерфейсы, которые конвертируют. От исследования до финального пикселя.">Konvertatsiya qiluvchi interfeyslar. Tadqiqotdan so'nggi pikselgacha.</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service-row scrolly-step">
+          <span class="service-index">02</span>
+          <h3 data-uz="Webflow Ishlab chiqish" data-ru="Webflow Разработка">Webflow Ishlab chiqish</h3>
+          <span class="service-desc" data-uz="Kodlashsiz tez, responsiv saytlar — animatsiya va CMS bilan." data-ru="Быстрые, адаптивные сайты без кода — с анимациями и CMS.">Kodlashsiz tez, responsiv saytlar — animatsiya va CMS bilan.</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service-row scrolly-step">
+          <span class="service-index">03</span>
+          <h3 data-uz="Brending" data-ru="Брендинг">Brending</h3>
+          <span class="service-desc" data-uz="Ajralib turadigan va yodda qoladigan identifikatsiya." data-ru="Айдентика, которая выделяется и запоминается.">Ajralib turadigan va yodda qoladigan identifikatsiya.</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service-row scrolly-step">
+          <span class="service-index">04</span>
+          <h3 data-uz="Motion Dizayn" data-ru="Моушн-дизайн">Motion Dizayn</h3>
+          <span class="service-desc" data-uz="Mahsulotlarga jon bag'ishlaydigan animatsiya va o'tishlar." data-ru="Анимации и переходы, которые оживляют продукт.">Mahsulotlarga jon bag'ishlaydigan animatsiya va o'tishlar.</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service-row scrolly-step">
+          <span class="service-index">05</span>
+          <h3 data-uz="No-Code Ishlab chiqish" data-ru="No-Code Разработка">No-Code Ishlab chiqish</h3>
+          <span class="service-desc" data-uz="Kodlashsiz MVP va landinglarni ishga tushiring." data-ru="Запускайте MVP и лендинги без программирования.">Kodlashsiz MVP va landinglarni ishga tushiring.</span>
+          <span class="service-arrow">↗</span>
+        </div>
+        <div class="service-row scrolly-step">
+          <span class="service-index">06</span>
+          <h3 data-uz="Strategiya" data-ru="Стратегия">Strategiya</h3>
+          <span class="service-desc" data-uz="Auditlar, foydalanuvchi tadqiqotlari va o'sish xaritasi." data-ru="Аудиты, исследования пользователей и карта роста.">Auditlar, foydalanuvchi tadqiqotlari va o'sish xaritasi.</span>
+          <span class="service-arrow">↗</span>
+        </div>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process scrolly" id="process">
+   <div class="scrolly-pin">
+    <div class="container">
+      <div class="section-tag scrolly-step">
+        <i class="sq"></i>
+        <span data-uz="Jarayon" data-ru="Процесс">Jarayon</span>
+      </div>
+      <h2 class="process-title scrolly-step" data-uz="Biz qanday ishlaymiz" data-ru="Как мы работаем">Biz qanday ishlaymiz</h2>
+    </div>
+
+    <div class="container process-grid">
+      <div class="process-card scrolly-step">
+        <span class="process-num">01</span>
+        <h3 data-uz="Tadqiqot" data-ru="Исследование">Tadqiqot</h3>
+        <span class="process-time" data-uz="1–2 kun" data-ru="1–2 дня">1–2 kun</span>
+        <p data-uz="Loyihani chuqur tahlil qilish va raqobatchilarni o'rganish." data-ru="Глубокий анализ проекта и исследование конкурентов.">Loyihani chuqur tahlil qilish va raqobatchilarni o'rganish.</p>
+      </div>
+      <div class="process-card scrolly-step">
+        <span class="process-num">02</span>
+        <h3 data-uz="Strategiya" data-ru="Стратегия">Strategiya</h3>
+        <span class="process-time" data-uz="2–3 kun" data-ru="2–3 дня">2–3 kun</span>
+        <p data-uz="Mahsulotga eng qisqa yo'lni loyihalash." data-ru="Проектирование кратчайшего пути к продукту.">Mahsulotga eng qisqa yo'lni loyihalash.</p>
+      </div>
+      <div class="process-card scrolly-step">
+        <span class="process-num">03</span>
+        <h3 data-uz="Dizayn" data-ru="Дизайн">Dizayn</h3>
+        <span class="process-time" data-uz="3–5 kun" data-ru="3–5 дней">3–5 kun</span>
+        <p data-uz="Zamonaviy, tekshirilgan interfeyslar yaratish." data-ru="Создание современных, проверенных интерфейсов.">Zamonaviy, tekshirilgan interfeyslar yaratish.</p>
+      </div>
+      <div class="process-card scrolly-step">
+        <span class="process-num">04</span>
+        <h3 data-uz="Ishga tushirish" data-ru="Запуск">Ishga tushirish</h3>
+        <span class="process-time" data-uz="7–14 kun" data-ru="7–14 дней">7–14 kun</span>
+        <p data-uz="Ishlab chiqish, sinov va production relizi." data-ru="Разработка, тестирование и релиз в продакшн.">Ishlab chiqish, sinov va production relizi.</p>
+      </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work scrolly" id="work">
+   <div class="scrolly-pin">
+    <div class="container work-head">
+      <div class="section-tag scrolly-step">
+        <i class="sq"></i>
+        <span data-uz="Tanlangan ishlar" data-ru="Избранные работы">Tanlangan ishlar</span>
+      </div>
+      <h2 class="work-title scrolly-step" data-uz="Portfoliomiz" data-ru="Наше портфолио">Portfoliomiz</h2>
+    </div>
+
+    <!-- The stage is a sibling of the heading: the heading is transformed as it
+         shrinks, which would otherwise trap the absolutely-positioned stage
+         inside its box instead of the full screen. -->
+    <div class="container work-collage">
+      <div class="work-grid" id="workGrid"></div>
+    </div>
+   </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials scrolly section-invert">
+   <div class="scrolly-pin">
+    <div class="container">
+      <div class="section-tag scrolly-step light">
+        <i class="sq"></i>
+        <span data-uz="Mijozlar fikri" data-ru="Отзывы клиентов">Mijozlar fikri</span>
+      </div>
+      <h2 class="testi-title scrolly-step" data-uz="Ular biz haqimizda shunday deyishadi" data-ru="Вот что о нас говорят">Ular biz haqimizda shunday deyishadi</h2>
+    </div>
+
+    <div class="container video-testi-grid" id="videoTestiGrid"></div>
+
+    <div class="container testi-grid" id="testiGrid"></div>
+   </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner scrolly">
+   <div class="scrolly-pin">
+    <div class="container cta-inner scrolly-step">
+      <h2 data-uz='G&#39;oyangizni birga <br><em>hayotga tatbiq etamiz.</em>' data-ru='Воплотим вашу идею <br><em>вместе в жизнь.</em>'>G'oyangizni birga <br><em>hayotga tatbiq etamiz.</em></h2>
+      <a href="#contact" class="btn btn-solid-invert js-project-btn" data-uz="Loyihani boshlash ↗" data-ru="Начать проект ↗">Loyihani boshlash ↗</a>
+    </div>
+   </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="footer-top reveal-up">
+      <h2 data-uz="Keling, <em>suhbatlashamiz.</em>" data-ru="Давайте <em>поговорим.</em>">Keling, <em>suhbatlashamiz.</em></h2>
+      <p class="footer-top-sub" data-uz="Formani to'ldiring — 24 soat ichida bog'lanamiz." data-ru="Заполните форму — свяжемся в течение 24 часов.">Formani to'ldiring — 24 soat ichida bog'lanamiz.</p>
+    </div>
+
+    <div class="footer-form lead-form-block reveal-up" data-delay="1">
+      <div class="pm-body">
+        <form class="js-lead-form" id="footerProjectForm">
+          <div class="pm-row">
+            <div>
+              <label class="pm-label" data-uz="Ism" data-ru="Имя">Ism</label>
+              <input type="text" name="name" class="pm-input" required autocomplete="name">
+            </div>
+            <div>
+              <label class="pm-label" data-uz="Telefon" data-ru="Телефон">Telefon</label>
+              <input type="tel" name="phone" class="pm-input" placeholder="+998 00-000-0000" required autocomplete="tel">
+            </div>
+          </div>
+
+          <label class="pm-label" data-uz="Loyihangiz haqida — ixtiyoriy" data-ru="Расскажите о своем проекте — необязательно">Loyihangiz haqida — ixtiyoriy</label>
+          <textarea name="message" class="pm-input pm-textarea" rows="3"></textarea>
+
+          <label class="pm-label" data-uz="Taxminiy byudjet? — ixtiyoriy" data-ru="Примерный бюджет? — необязательно">Taxminiy byudjet? — ixtiyoriy</label>
+          <div class="pm-budget-grid">
+            <button type="button" class="pm-budget-btn" data-value="under_1k" data-uz="$1 000 gacha" data-ru="до $1 000">$1 000 gacha</button>
+            <button type="button" class="pm-budget-btn" data-value="1k_3k" data-uz="$1 000 – $3 000" data-ru="$1 000 – $3 000">$1 000 – $3 000</button>
+            <button type="button" class="pm-budget-btn" data-value="3k_7k" data-uz="$3 000 – $7 000" data-ru="$3 000 – $7 000">$3 000 – $7 000</button>
+            <button type="button" class="pm-budget-btn" data-value="7k_plus" data-uz="$7 000 dan ko'p" data-ru="более $7 000">$7 000 dan ko'p</button>
+          </div>
+
+          <div class="form-error"></div>
+          <button type="submit" class="pm-submit" data-uz="Yuborish" data-ru="Отправить">Yuborish</button>
+
+          <div class="pm-alt-actions">
+            <a href="https://t.me/+998333303304" target="_blank" rel="noopener" class="pm-alt-btn">Telegram</a>
+            <a href="tel:+998333303304" class="pm-alt-btn" data-uz="Qo'ng'iroq qilish" data-ru="Позвонить">Qo'ng'iroq qilish</a>
+          </div>
+        </form>
+      </div>
+      <div class="pm-success hidden">
+        <div class="pm-success-icon">✓</div>
+        <p data-uz="Rahmat! Tez orada siz bilan bog'lanamiz." data-ru="Спасибо! Мы скоро свяжемся с вами.">Rahmat! Tez orada siz bilan bog'lanamiz.</p>
+      </div>
+    </div>
+
+    <div class="footer-grid reveal-up" data-delay="1">
+      <div class="footer-col">
+        <span class="logo"><span class="logo-mark">◆</span> DZYN<span class="logo-sup">®</span></span>
+        <p data-uz="Digitalverse jamoasining raqamli tajribalarni qayta ta'riflaydigan dizayn studiyasi." data-ru="Дизайн-студия команды Digitalverse, переосмысляющая цифровой опыт.">Digitalverse jamoasining raqamli tajribalarni qayta ta'riflaydigan dizayn studiyasi.</p>
+        <span class="footer-note" data-uz="24 soat ichida javob beramiz · Bepul konsultatsiya" data-ru="Ответим в течение 24 часов · Бесплатная консультация">24 soat ichida javob beramiz · Bepul konsultatsiya</span>
+      </div>
+      <div class="footer-col">
+        <h4 data-uz="Sahifalar" data-ru="Страницы">Sahifalar</h4>
+        <a href="#about" data-uz="Biz haqimizda" data-ru="О нас">Biz haqimizda</a>
+        <a href="#services" data-uz="Xizmatlar" data-ru="Услуги">Xizmatlar</a>
+        <a href="#process" data-uz="Jarayon" data-ru="Процесс">Jarayon</a>
+        <a href="#work" data-uz="Ishlar" data-ru="Работы">Ishlar</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-uz="Ijtimoiy tarmoqlar" data-ru="Соцсети">Ijtimoiy tarmoqlar</h4>
+        <a href="https://t.me/+998333303304" target="_blank" rel="noopener">Telegram ↗</a>
+        <a href="https://www.instagram.com/dzyn.uz/" target="_blank" rel="noopener">Instagram — @dzyn.uz ↗</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-uz="Aloqa" data-ru="Контакты">Aloqa</h4>
+        <p data-uz="Toshkent, O'zbekiston" data-ru="Ташкент, Узбекистан">Toshkent, O'zbekiston</p>
+        <p>+998 33 330 33 04</p>
+        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cca5a2aaa38ca8a5aba5b8ada0baa9bebfa9e2b9b6">[email&#160;protected]</a></p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span data-uz="© 2026 Digitalverse. Barcha huquqlar himoyalangan." data-ru="© 2026 Digitalverse. Все права защищены.">© 2026 Digitalverse. Barcha huquqlar himoyalangan.</span>
+      <span data-uz="DZYN — dizayn studiyasi." data-ru="DZYN — дизайн-студия.">DZYN — dizayn studiyasi.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- PORTFOLIO CASE VIEWER (on-site gallery) -->
+<div class="case-modal-overlay" id="caseModalOverlay">
+  <div class="case-modal">
+    <div class="case-modal-head">
+      <h3 id="caseModalTitle"></h3>
+      <button class="case-modal-close" id="caseModalClose" aria-label="Yopish">✕</button>
+    </div>
+    <div class="case-modal-scroll" id="caseModalScroll"></div>
+  </div>
+</div>
+
+<!-- PROJECT / LEAD MODAL -->
+<div class="project-modal-overlay" id="projectModalOverlay">
+  <div class="project-modal lead-form-block">
+    <button class="project-modal-close" id="projectModalClose" aria-label="Yopish">✕</button>
+
+    <div class="pm-body">
+      <h3 class="pm-title" data-uz="Loyihani boshlaylik" data-ru="Начнём проект">Loyihani boshlaylik</h3>
+
+      <form class="js-lead-form" id="projectForm">
+        <label class="pm-label" data-uz="Ism" data-ru="Имя">Ism</label>
+        <input type="text" name="name" class="pm-input" required autocomplete="name">
+
+        <label class="pm-label" data-uz="Telefon" data-ru="Телефон">Telefon</label>
+        <input type="tel" name="phone" class="pm-input" placeholder="+998 00-000-0000" required autocomplete="tel">
+
+        <label class="pm-label" data-uz="Loyihangiz haqida — ixtiyoriy" data-ru="Расскажите о своем проекте — необязательно">Loyihangiz haqida — ixtiyoriy</label>
+        <textarea name="message" class="pm-input pm-textarea" rows="3"></textarea>
+
+        <label class="pm-label" data-uz="Taxminiy byudjet? — ixtiyoriy" data-ru="Примерный бюджет? — необязательно">Taxminiy byudjet? — ixtiyoriy</label>
+        <div class="pm-budget-grid">
+          <button type="button" class="pm-budget-btn" data-value="under_1k" data-uz="$1 000 gacha" data-ru="до $1 000">$1 000 gacha</button>
+          <button type="button" class="pm-budget-btn" data-value="1k_3k" data-uz="$1 000 – $3 000" data-ru="$1 000 – $3 000">$1 000 – $3 000</button>
+          <button type="button" class="pm-budget-btn" data-value="3k_7k" data-uz="$3 000 – $7 000" data-ru="$3 000 – $7 000">$3 000 – $7 000</button>
+          <button type="button" class="pm-budget-btn" data-value="7k_plus" data-uz="$7 000 dan ko'p" data-ru="более $7 000">$7 000 dan ko'p</button>
+        </div>
+
+        <div class="form-error"></div>
+        <button type="submit" class="pm-submit" data-uz="Yuborish" data-ru="Отправить">Yuborish</button>
+
+        <div class="pm-alt-actions">
+          <a href="https://t.me/+998333303304" target="_blank" rel="noopener" class="pm-alt-btn">Telegram</a>
+          <a href="tel:+998333303304" class="pm-alt-btn" data-uz="Qo'ng'iroq qilish" data-ru="Позвонить">Qo'ng'iroq qilish</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="pm-success hidden">
+      <div class="pm-success-icon">✓</div>
+      <p data-uz="Rahmat! Tez orada siz bilan bog'lanamiz." data-ru="Спасибо! Мы скоро свяжемся с вами.">Rahmat! Tez orada siz bilan bog'lanamiz.</p>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js?v=1790167364000"></script>
+<script type="module" src="hero3d.js?v=1790167364000"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"190a7bd731f04223883886defff33c2d","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

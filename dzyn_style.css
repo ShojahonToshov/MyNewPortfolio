@@ -1,0 +1,1727 @@
+/* ===== RESET & BASE ===== */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --bg:#0a0a0a;
+  --bg-2:#000000;
+  --fg:#ffffff;
+  --surface:#141414;
+  --surface-2:#1c1c1c;
+  --border:rgba(255,255,255,.12);
+  --border-soft:rgba(255,255,255,.08);
+  --muted:rgba(255,255,255,.55);
+  --dim:rgba(255,255,255,.35);
+  /* Anton and Space Mono are Latin-only, so RU fell back to a different face.
+     Fira Sans Extra Condensed and JetBrains Mono carry Latin *and* Cyrillic —
+     one typeface per role, identical in both languages. */
+  --mono: "JetBrains Mono", "SF Mono", monospace;
+  --display: "Fira Sans Extra Condensed", "Helvetica Neue", Arial, sans-serif;
+  --ease: cubic-bezier(.16,.84,.36,1);
+  --ease-soft: cubic-bezier(.22,.61,.36,1);
+  --shadow-card: 0 4px 24px -8px rgba(0,0,0,.5);
+  --shadow-card-hover: 0 30px 80px -20px rgba(0,0,0,.7);
+  --glow: 0 0 60px -10px rgba(255,255,255,.15);
+}
+
+html{
+  scroll-behavior:smooth;
+  overflow-x:clip;
+}
+
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family: "Inter", "Helvetica Neue", Arial, "Segoe UI", sans-serif;
+  cursor:default;
+  -webkit-font-smoothing:antialiased;
+}
+
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+.hidden{ display:none !important; }
+
+.container{
+  width:100%;
+  max-width:1240px;
+  margin:0 auto;
+  padding:0 32px;
+}
+
+em{ font-style:italic; font-weight:400; color:var(--muted); }
+
+
+/* ===== SCROLL PROGRESS ===== */
+
+.progress-bar{
+  position:fixed;
+  top:0; left:0;
+  height:2px;
+  width:0%;
+  background:#fff;
+  z-index:10000;
+  transition: width .1s linear;
+  box-shadow: 0 0 12px rgba(255,255,255,.6);
+}
+
+/* ===== HEADER (full-bleed technical bar) ===== */
+.header{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:1000;
+  padding:22px 0;
+  transition: all .4s var(--ease);
+  background:linear-gradient(to bottom, rgba(10,10,10,.9), transparent);
+}
+.header.scrolled{
+  padding:14px 0;
+  background:rgba(10,10,10,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-soft);
+}
+.header-inner{
+  max-width:1240px;
+  margin:0 auto;
+  padding:0 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.logo{
+  font-size:19px;
+  font-weight:700;
+  letter-spacing:-0.5px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+}
+.logo-mark{ font-size:14px; }
+.logo-sup{ font-size:10px; vertical-align:super; opacity:.5; }
+
+.nav{
+  display:flex;
+  gap:26px;
+  font-size:12px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  color:#fff;
+}
+.nav a{
+  position:relative;
+  opacity:.5;
+  white-space:nowrap;
+  transition:opacity .3s;
+}
+.nav a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:-4px;
+  width:0; height:1px;
+  background:currentColor;
+  transition:width .3s var(--ease);
+}
+.nav a:hover{ opacity:1; }
+.nav a:hover::after{ width:100%; }
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.header-cta{
+  background:#fff;
+  color:#000 !important;
+  font-size:13px;
+  padding:11px 20px;
+}
+.header-cta .arrow{ color:#000; }
+
+.lang-switch{
+  display:flex;
+  align-items:center;
+  border:1px solid var(--border);
+  border-radius:100px;
+  padding:3px;
+  gap:2px;
+}
+.lang-btn{
+  background:none;
+  border:none;
+  color:var(--dim);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.5px;
+  padding:6px 12px;
+  border-radius:100px;
+  cursor:pointer;
+  transition: background .3s, color .3s;
+}
+.lang-btn.active{
+  background:#fff;
+  color:#000;
+}
+.lang-switch-mobile{
+  border-color:var(--border);
+  margin-top:10px;
+}
+.lang-switch-mobile .lang-btn{ font-size:14px; padding:8px 16px; }
+
+/* Button reset. :where() keeps this at zero specificity: it only has to beat
+   the UA stylesheet (which it does, being an author rule), never the site's
+   own rules. Without it a .btn on a <button> renders with the UA's grey fill
+   and reads as a disabled control. */
+:where(.btn){
+  background:transparent; color:inherit; font-family:inherit; cursor:pointer;
+  -webkit-appearance:none; appearance:none;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+  font-weight:500;
+  padding:14px 26px;
+  border-radius:100px;
+  white-space:nowrap;
+  transition: transform .4s var(--ease), background .3s, color .3s, border-color .3s, box-shadow .4s var(--ease);
+}
+.btn:hover{ transform:translateY(-3px); }
+.btn .arrow{ transition:transform .3s var(--ease); display:inline-block; }
+.btn:hover .arrow{ transform:translate(3px,-3px); }
+
+.btn-pill{ border-radius:100px; }
+.btn-solid{ background:#fff; color:#000; }
+.btn-solid:hover{ background:#eee; box-shadow: var(--glow); }
+.btn-outline{ border:1px solid var(--border); color:#fff; }
+.btn-outline:hover{ border-color:#fff; }
+.btn-solid-invert{ background:#000; color:#fff; border:1px solid var(--border); }
+.btn-solid-invert:hover{ box-shadow: var(--glow); }
+
+.menu-btn{
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-end;
+  gap:5px;
+  /* 44px is the smallest comfortable touch target */
+  width:44px;
+  height:44px;
+  margin-right:-9px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  z-index:1200;
+}
+.menu-btn span{
+  height:2px; width:26px;
+  background:#fff;
+  transition:.3s;
+}
+
+.mobile-menu{
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:1100;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:28px;
+  transform:translateY(-100%);
+  transition:transform .5s var(--ease);
+}
+.mobile-menu.open{ transform:translateY(0); }
+.mobile-menu a:not(.btn){
+  color:#fff;
+  font-size:28px;
+  font-weight:500;
+}
+/* The overlay sits above the header, so the hamburger is unreachable while
+   the menu is open — this is the way back out. */
+.mobile-menu-close{
+  position:absolute;
+  top:14px; right:16px;
+  width:46px; height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:none;
+  color:#fff;
+  font-size:19px;
+  line-height:1;
+  cursor:pointer;
+  transition: background .2s, border-color .2s;
+}
+.mobile-menu-close:hover{ background:rgba(255,255,255,.1); border-color:#fff; }
+/* The header CTA is hidden on phones, so the menu carries it instead. */
+.mobile-menu .mobile-menu-cta{ font-size:16px; margin-top:6px; }
+
+/* ===== HERO (dark, dominant type, sticky 3D scrollytelling) ===== */
+.hero{
+  position:relative;
+  height:220vh;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.05), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,.04), transparent 50%),
+    var(--bg);
+  color:var(--fg);
+}
+.hero-pin{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+  will-change:opacity, transform;
+}
+
+/* Solid ground so the pinned hero never shows through the content that follows. */
+.hero-intro{
+  position:relative;
+  z-index:2;
+  background:var(--bg);
+  padding:110px 0 30px;
+}
+.hero-meta{
+  position:absolute;
+  top:100px;
+  left:0; right:0;
+  display:flex;
+  justify-content:space-between;
+  padding:0 32px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  color:var(--dim);
+  z-index:4;
+  pointer-events:none;
+}
+.hero-meta div{ line-height:1.6; text-align:left; }
+.hero-meta div:last-child{ text-align:right; }
+
+.hero-3d{
+  position:absolute;
+  top:54%; left:50%;
+  width:min(66vw, 620px);
+  height:min(66vw, 620px);
+  transform:translate(-50%,-50%);
+  z-index:1;
+  pointer-events:none;
+  opacity:0;
+  transition: opacity 1.6s var(--ease);
+}
+.hero-3d canvas{
+  width:100% !important;
+  height:100% !important;
+  display:block;
+}
+/* The gem sits directly behind the headline. At full strength the hard boundary
+   between a lit and an unlit facet shows through the counters of letters like
+   "Ы" and reads as a stray speck, so it stays a faint presence instead. */
+.hero.in-view .hero-3d{ opacity:.5; }
+
+.hero-inner{
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  /* Wide enough for the longest headline line in either language — at 1000px
+     even "ВЫГЛЯДИТЕ" overflowed, which pushed "НЕ" onto a line of its own. */
+  max-width:1300px;
+  margin:0 auto;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--border);
+  background:rgba(10,10,10,.5);
+  backdrop-filter:blur(6px);
+  padding:8px 16px;
+  border-radius:100px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:28px;
+  color:var(--muted);
+  position:relative;
+  z-index:4;
+}
+.badge .dot{
+  width:6px; height:6px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow: 0 0 8px #fff;
+}
+
+.hero-title-main{
+  font-family:var(--display);
+  font-size:clamp(64px, 15vw, 208px);
+  font-weight:800;
+  /* Cyrillic accents ("Ё", "Й") reach ~0.93em above the baseline. At .88 the
+     accent on the second line poked up into the first one and read as a pair of
+     stray dots, so the lines need at least that much room — 1.05 keeps a margin
+     at small sizes too, where 1.0 left only a few pixels. */
+  line-height:1.05;
+  letter-spacing:0;
+  text-transform:uppercase;
+}
+.hero-title-main .line{
+  display:block;
+  overflow:hidden;
+}
+.reveal-line{
+  display:block;
+  transform:translateY(110%);
+  transition: transform 1.1s var(--ease);
+}
+.hero.in-view .reveal-line{ transform:translateY(0); }
+
+.reveal-outline{
+  -webkit-text-stroke: 2px #fff;
+  color:transparent;
+}
+
+.hero-subtitle{
+  position:relative;
+  z-index:4;
+  font-size:clamp(14px,1.6vw,17px);
+  font-weight:500;
+  color:var(--fg);
+  background:rgba(10,10,10,.55);
+  backdrop-filter:blur(6px);
+  padding:8px 18px;
+  border-radius:100px;
+  border:1px solid var(--border-soft);
+  margin-top:26px;
+}
+
+.hero-stages{
+  position:absolute;
+  left:32px;
+  bottom:110px;
+  z-index:4;
+  text-align:left;
+  pointer-events:none;
+}
+.hero-stage{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(22px,3vw,36px);
+  text-transform:uppercase;
+  line-height:1.05;
+  color:var(--fg);
+  opacity:0;
+  transform:translateY(16px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+  position:absolute;
+  left:0; bottom:0;
+  white-space:nowrap;
+}
+.hero-stage.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.hero-below{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.hero-desc{
+  max-width:520px;
+  margin:0 auto 28px;
+}
+.hero-desc p{
+  font-size:16px;
+  line-height:1.6;
+  color:var(--muted);
+}
+.hero-tags{
+  display:flex;
+  justify-content:center;
+  gap:24px;
+  font-family:var(--mono);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:var(--dim);
+  margin-bottom:32px;
+  flex-wrap:wrap;
+}
+.hero-buttons{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  margin-bottom:56px;
+}
+
+/* ----- Hero fanned portfolio cards ----- */
+.hero-fan{
+  position:relative;
+  width:100%;
+  max-width:900px;
+  height:260px;
+  margin:0 auto;
+  /* scale + margin are set by layoutHeroFan() so the spread always fits the screen */
+  transform-origin:center top;
+}
+.hero-fan-card{
+  position:absolute;
+  top:50%; left:50%;
+  width:150px;
+  height:200px;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow: var(--shadow-card-hover);
+  background:var(--surface);
+  border:1px solid var(--border);
+  transform: translate(-50%,-50%) translateX(0) rotate(0deg) scale(.5);
+  opacity:0;
+  transition: transform 1s var(--ease), opacity .8s ease;
+  transition-delay: var(--fan-delay, 0s);
+  cursor:pointer;
+}
+.hero-intro.in-view .hero-fan .hero-fan-card{
+  transform: translate(-50%,-50%) translateX(var(--tx, 0)) rotate(var(--rot, 0deg)) scale(var(--scale, 1));
+  opacity:1;
+}
+.hero-fan-card img{
+  width:100%; height:100%;
+  object-fit:cover;
+  transition: transform .5s var(--ease);
+}
+.hero-fan-card:hover{ z-index:20 !important; }
+.hero-fan-card:hover img{ transform:scale(1.08); }
+.hero-fan-badge{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:#fff;
+  color:#000;
+  font-size:12px;
+  font-weight:600;
+  padding:7px 14px 7px 7px;
+  border-radius:100px;
+  box-shadow: var(--shadow-card-hover);
+  white-space:nowrap;
+  opacity:0;
+  transform:translateY(10px) scale(.9);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+  transition-delay: var(--fan-delay, 0s);
+  z-index:15;
+}
+.hero-intro.in-view .hero-fan .hero-fan-badge{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.hero-fan-badge img{
+  width:22px; height:22px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+.scroll-hint{
+  position:absolute;
+  bottom:28px;
+  right:32px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--dim);
+  z-index:2;
+}
+.scroll-line{
+  width:1px; height:40px;
+  background:var(--border);
+  position:relative;
+  overflow:hidden;
+}
+.scroll-line i{
+  position:absolute;
+  top:-40px; left:0;
+  width:100%; height:100%;
+  background:#fff;
+  animation: scrollDown 2s ease-in-out infinite;
+}
+@keyframes scrollDown{
+  0%{ top:-40px; }
+  60%{ top:40px; }
+  100%{ top:40px; }
+}
+
+/* ===== REVEAL SYSTEM (generic) ===== */
+.reveal-up, .reveal-fade{
+  opacity:0;
+  transform:translateY(64px) scale(.97);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+  will-change: transform, opacity;
+}
+.reveal-fade{ transform:none; }
+.in-view .reveal-up,
+.reveal-up.in-view,
+.in-view.reveal-up{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.reveal-fade.in-view{ opacity:1; }
+
+[data-delay="0"]{ transition-delay:0s; }
+[data-delay="1"]{ transition-delay:.12s; }
+[data-delay="2"]{ transition-delay:.24s; }
+[data-delay="3"]{ transition-delay:.36s; }
+[data-delay="4"]{ transition-delay:.48s; }
+
+/* ===== MARQUEE ===== */
+.marquee-section{
+  background:var(--bg);
+  padding:70px 0;
+  border-bottom:1px solid var(--border-soft);
+}
+.marquee-label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:34px;
+}
+.tick{ font-size:14px; }
+
+.marquee{
+  overflow:hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.marquee-track{
+  display:flex;
+  gap:80px;
+  width:max-content;
+  animation: marqueeScroll 26s linear infinite;
+}
+.marquee-track span{
+  font-family:var(--display);
+  font-size:clamp(28px,4vw,44px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  color:#fff;
+  opacity:.18;
+  white-space:nowrap;
+}
+@keyframes marqueeScroll{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+
+/* ===== SECTION TAG ===== */
+.section-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+.section-tag .sq{
+  width:8px; height:8px;
+  background:#fff;
+  display:inline-block;
+}
+
+/* ===== ABOUT ===== */
+.about{
+  padding:140px 0;
+  background:var(--bg);
+}
+.about-title{
+  font-size:clamp(28px,4.2vw,52px);
+  font-weight:600;
+  line-height:1.25;
+  letter-spacing:-1px;
+  max-width:920px;
+  margin-bottom:36px;
+}
+.text-ghost{ color:var(--muted); }
+.about-link{
+  font-size:14px;
+  border-bottom:1px dashed #fff;
+  padding-bottom:4px;
+  display:inline-block;
+  transition:opacity .3s;
+}
+.about-link:hover{ opacity:.6; }
+
+.stats-grid-wrap{ padding:80px 32px 0; }
+.stats-grid-small{
+  grid-template-columns:repeat(3,1fr);
+  gap:40px;
+}
+.stats-grid-small .stat-label{
+  border-bottom:none;
+  padding-bottom:0;
+  font-weight:500;
+  color:var(--muted);
+}
+
+/* ===== STATS ===== */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:48px;
+}
+.stat-num{
+  font-family:var(--display);
+  font-size:clamp(40px,5vw,64px);
+  font-weight:800;
+  letter-spacing:0;
+  margin-bottom:10px;
+}
+.stat-label{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:12px;
+  padding-bottom:16px;
+  border-bottom:1px dashed var(--border);
+}
+.stat p{
+  font-size:13px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
+/* ===== SERVICES ===== */
+.services{
+  padding:140px 0;
+  background:var(--bg);
+  color:var(--fg);
+}
+.services-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:40px;
+  flex-wrap:wrap;
+  margin-bottom:50px;
+}
+.services-head h2{
+  font-family:var(--display);
+  font-size:clamp(36px,5.5vw,64px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+}
+.services-head p{
+  max-width:360px;
+  font-size:14px;
+  line-height:1.7;
+  color:var(--muted);
+}
+
+.service-row{
+  display:flex;
+  align-items:center;
+  gap:32px;
+  padding:26px 28px;
+  margin-bottom:12px;
+  background:var(--surface);
+  border:1px solid var(--border-soft);
+  border-radius:18px;
+  transition: box-shadow .4s var(--ease), transform .4s var(--ease), border-color .4s;
+  cursor:pointer;
+}
+.service-row:hover{
+  box-shadow: var(--glow);
+  border-color:var(--border);
+  transform:translateY(-4px);
+}
+.service-index{
+  font-family:var(--mono);
+  font-size:14px;
+  color:var(--dim);
+  width:36px;
+  flex-shrink:0;
+}
+.service-row h3{
+  font-size:clamp(20px,2.6vw,30px);
+  font-weight:500;
+  letter-spacing:-.5px;
+}
+.service-row .service-desc{
+  flex:1;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--muted);
+  text-align:right;
+  margin-left:auto;
+  padding-left:24px;
+  max-width:360px;
+}
+.service-arrow{
+  font-size:22px;
+  opacity:0;
+  transform:translate(-10px,10px);
+  transition: all .4s var(--ease);
+  flex-shrink:0;
+}
+.service-row:hover .service-arrow{
+  opacity:1;
+  transform:translate(0,0);
+}
+
+/* ===== PROCESS ===== */
+.process{
+  padding:140px 0;
+  background:var(--bg);
+}
+.process-title{
+  font-family:var(--display);
+  font-size:clamp(36px,5.5vw,64px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin-bottom:70px;
+}
+.process-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.process-card{
+  background:var(--surface);
+  border:1px solid var(--border-soft);
+  border-radius:18px;
+  padding:32px 26px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition: box-shadow .4s var(--ease), transform .4s var(--ease), border-color .4s;
+}
+.process-card:hover{ box-shadow: var(--glow); border-color:var(--border); transform:translateY(-4px); }
+.process-num{
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+}
+.process-card h3{
+  font-size:22px;
+  font-weight:600;
+  letter-spacing:-.5px;
+}
+.process-time{
+  font-family:var(--mono);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:var(--muted);
+  padding-bottom:14px;
+  border-bottom:1px dashed var(--border);
+}
+.process-card p{
+  font-size:13px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonials{
+  padding:140px 0;
+  background:var(--bg);
+  color:var(--fg);
+}
+.testi-title{
+  font-family:var(--display);
+  font-size:clamp(32px,4.8vw,56px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  max-width:700px;
+  margin-bottom:70px;
+}
+.video-testi-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:16px;
+  margin-bottom:80px;
+}
+.video-testi{
+  position:relative;
+  aspect-ratio:9/16;
+  border-radius:16px;
+  overflow:hidden;
+  background:var(--surface);
+  border:1px solid var(--border-soft);
+}
+.video-testi iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+
+.testi-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+}
+.testi-card{
+  background:var(--surface);
+  border:1px solid var(--border-soft);
+  border-radius:16px;
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:32px;
+  min-height:220px;
+  transition: box-shadow .3s var(--ease), transform .3s var(--ease), border-color .3s;
+}
+.testi-card:hover{
+  box-shadow: var(--glow);
+  border-color:var(--border);
+  transform:translateY(-4px);
+}
+.testi-card p{
+  font-size:17px;
+  line-height:1.55;
+  letter-spacing:-.2px;
+}
+.testi-author{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  font-size:13px;
+}
+.testi-author strong{ font-weight:600; }
+.testi-author span{ color:var(--muted); }
+
+/* ===== WORK ===== */
+.work{
+  padding:140px 0;
+  background:var(--bg);
+}
+.work-title{
+  font-family:var(--display);
+  font-size:clamp(36px,5.5vw,64px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin-bottom:60px;
+}
+.work-collage{
+  background:none;
+}
+.work-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  /* Each card takes its artwork's own proportions, so nothing is cropped and
+     no blurred filler shows; rows sit to the top rather than stretching. */
+  align-items:start;
+  gap:28px;
+}
+.work-card{
+  display:block;
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  cursor:pointer;
+  aspect-ratio:var(--ar, 1/1);
+  border:1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .4s var(--ease), transform .4s var(--ease), border-color .4s;
+}
+.work-card:hover{
+  box-shadow: var(--glow);
+  border-color:var(--border);
+  transform:translateY(-4px);
+}
+.work-info .view-link{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:rgba(255,255,255,.85);
+  opacity:0;
+  transform:translateY(6px);
+  transition: all .3s var(--ease);
+  flex-shrink:0;
+}
+.work-card:hover .view-link{
+  opacity:1;
+  transform:translateY(0);
+}
+.work-media{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--surface-2);
+}
+.work-media .media-bg{
+  display:none;   /* frames match their artwork now — no filler needed */
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:blur(24px) brightness(.45) saturate(1.1);
+  transform:scale(1.25);
+}
+.work-media .media-fg{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  transition: transform .7s var(--ease);
+}
+.work-card:hover .work-media .media-fg{ transform:scale(1.05); }
+
+.work-info{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  padding:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  background:linear-gradient(to top, rgba(0,0,0,.85), transparent 65%);
+  color:#fff;
+}
+.work-info-text{ min-width:0; }
+.work-info-text h3{ font-size:16px; font-weight:600; }
+.work-info-text span{ font-size:12px; color:rgba(255,255,255,.7); white-space:nowrap; }
+
+/* ===== CTA BANNER ===== */
+.cta-banner{
+  background:var(--bg);
+  padding:60px 0 130px;
+}
+.cta-inner{
+  background:#fff;
+  color:#000;
+  border-radius:28px;
+  padding:70px 60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:40px;
+  flex-wrap:wrap;
+  box-shadow: var(--shadow-card-hover);
+}
+.cta-inner h2{
+  font-family:var(--display);
+  font-size:clamp(32px,5.5vw,64px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  line-height:1.05;
+}
+.cta-inner h2 em{ color:rgba(0,0,0,.4); font-style:italic; }
+.cta-inner .btn-solid-invert{ background:#000; color:#fff; border:none; }
+
+/* ===== FOOTER ===== */
+.footer{
+  background:var(--bg);
+  padding-top:120px;
+}
+.footer-top{
+  padding-bottom:48px;
+}
+.footer-top h2{
+  font-family:var(--display);
+  font-size:clamp(32px,5.5vw,60px);
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.footer-top h2 em{ color:var(--muted); font-style:italic; }
+.footer-top-sub{
+  font-size:15px;
+  color:var(--muted);
+}
+
+/* ===== FOOTER — INLINE LEAD FORM ===== */
+.footer-form{
+  max-width:640px;
+  padding-bottom:80px;
+  border-bottom:1px solid var(--border-soft);
+}
+.footer-form .pm-title{ display:none; }
+.footer-form .pm-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 28px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:40px;
+  padding:70px 0;
+}
+.footer-col{ display:flex; flex-direction:column; gap:12px; }
+.footer-col h4{
+  font-family:var(--mono);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.footer-col a, .footer-col p{
+  font-size:14px;
+  color:var(--muted);
+}
+/* Footer links sit in a tight stack — give them a real touch target. */
+.footer-col a{ display:inline-block; padding:6px 0; }
+.footer-col a:hover{ color:#fff; }
+.footer-col .logo{ color:#fff; margin-bottom:8px; }
+.footer-note{
+  display:inline-block;
+  margin-top:8px;
+  font-size:12px;
+  color:var(--muted);
+  border-top:1px dashed var(--border);
+  padding-top:12px;
+}
+
+.footer-bottom{
+  display:flex;
+  justify-content:space-between;
+  padding:26px 0;
+  border-top:1px solid var(--border-soft);
+  font-family:var(--mono);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:var(--dim);
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* ===== SECTION SCROLLYTELLING =====
+   Each .scrolly section pins for the length of its own scroll range while its
+   .scrolly-step children arrive one after another, then hands over to the next. */
+.scrolly{
+  position:relative;
+  padding:0 !important;
+  /* 100vh of pin + one beat per step, capped so long sections don't drag. */
+  height: calc(100vh + min(var(--steps, 4) * 16vh, 150vh));
+}
+.scrolly-pin{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  overflow:hidden;
+  padding:96px 0 56px;
+}
+.scrolly-step{
+  opacity:0;
+  transform:translateY(38px);
+  transition: opacity .7s var(--ease), transform .8s var(--ease);
+  will-change:opacity, transform;
+}
+.scrolly-step.on{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* --- keep every pinned composition inside one screen --- */
+.scrolly-pin .about-title{ font-size:clamp(24px,3.2vw,40px); margin-bottom:26px; }
+.scrolly-pin .stats-grid-wrap{ padding:52px 32px 0; }
+.scrolly-pin .section-tag{ margin-bottom:18px; }
+
+.scrolly-pin .services-head{ margin-bottom:30px; }
+.scrolly-pin .services-head h2{ font-size:clamp(30px,4vw,48px); }
+.scrolly-pin .service-row{ padding:15px 24px; margin-bottom:9px; border-radius:14px; }
+.scrolly-pin .service-row h3{ font-size:clamp(17px,1.8vw,22px); }
+.scrolly-pin .service-row .service-desc{ font-size:13px; }
+
+.scrolly-pin .process-title{ margin-bottom:40px; font-size:clamp(30px,4.4vw,52px); }
+.scrolly-pin .process-card{ padding:24px 22px; }
+
+.scrolly-pin .work-title{ margin-bottom:32px; font-size:clamp(30px,4.4vw,52px); }
+
+/* ----- Pinned portfolio: a perspective tunnel. Each project sits at a fixed
+   point in 3D space; scrolling flies the camera through them, so one work at a
+   time swells out of the vanishing point and passes the viewer. ----- */
+/* The fly-through runs on every screen tall enough to hold a stage. Only
+   landscape phones drop back to the plain grid — see the max-height rule below.
+   The !important and the extra class beat the unpin block further down, which
+   flattens every other pinned section on small screens. */
+@media (min-height:641px){
+  /* A longer runway so the fly-through has room to breathe. JS sets the value
+     from the number of works, so adding one in the admin panel lengthens the
+     section instead of speeding the camera up. */
+  .work.scrolly{ height: calc(100vh + var(--work-runway, 240vh)) !important; padding:0 !important; }
+
+  /* Heading opens the section at the top, above the works, and shrinks as the
+     camera moves in — JS drives the scale/opacity every frame. */
+  .work .scrolly-pin{
+    position:sticky;
+    top:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    justify-content:flex-start;
+    padding-top:clamp(92px, 13vh, 130px);
+  }
+  .work .scrolly-pin .work-head{
+    position:relative;
+    z-index:200;
+    transform-origin:left top;
+    will-change:transform, opacity;
+  }
+  /* The stage lives inside this container, so the heading needs to outrank the
+     cards' own z-index within it. */
+  .work .scrolly-pin .section-tag,
+  .work .scrolly-pin .work-title{
+    position:relative;
+    z-index:300;
+  }
+
+  /* The stage escapes the 1240px container and fills the entire pin — the pin's
+     own overflow:hidden clips cards at the screen edge, like cosmos.studio. */
+  .scrolly-pin .work-grid{
+    display:block;
+    position:absolute;
+    inset:0;
+    height:auto;
+    perspective:1000px;
+    perspective-origin:50% 50%;
+    transform-style:preserve-3d;
+    pointer-events:none;
+  }
+  .scrolly-pin .work-grid .work-card{ pointer-events:auto; }
+  .scrolly-pin .work-grid .work-card{
+    position:absolute;
+    left:50%; top:50%;
+    width:calc(var(--bw, 320px) * var(--work-k, 1));
+    aspect-ratio:var(--ar, 4/3);
+    opacity:0;
+    overflow:visible;
+    border:none;
+    border-radius:0;
+    box-shadow:none;
+    /* the tunnel writes transform/opacity/z-index inline every frame */
+    transition:none;
+    will-change:transform, opacity;
+  }
+
+  .scrolly-pin .work-grid .work-media{
+    border-radius:14px;
+    border:1px solid var(--border);
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.9);
+  }
+  .scrolly-pin .work-grid .work-info{
+    position:absolute;
+    top:calc(100% + 12px);
+    left:0; right:auto; bottom:auto;
+    display:block;
+    padding:0;
+    background:none;
+  }
+  .scrolly-pin .work-grid .work-info-text h3{
+    font-size:16px;
+    font-weight:500;
+    color:var(--fg);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .scrolly-pin .work-grid .work-info-text span{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .scrolly-pin .work-grid .view-link{ display:none; }
+  /* hover must not fight the per-frame transform */
+  /* Hover must never touch the card's transform — the tunnel rewrites it every
+     frame, and overriding it snaps the card back to the stage centre. All the
+     feedback lives on the inner frame instead. */
+  .scrolly-pin .work-grid .work-card:hover{ transform:none; }
+  .scrolly-pin .work-grid .work-media{
+    transition: box-shadow .4s var(--ease), border-color .4s var(--ease);
+  }
+  .scrolly-pin .work-grid .work-card:hover .work-media{
+    border-color:#fff;
+    box-shadow:0 0 0 1px rgba(255,255,255,.5), 0 40px 90px -30px rgba(0,0,0,.9);
+  }
+  .scrolly-pin .work-grid .work-card:hover .work-info-text h3{ color:#fff; }
+}
+
+.scrolly-pin .testi-title{ margin-bottom:28px; font-size:clamp(26px,3.4vw,42px); }
+/* A pinned composition must stay in one screen, so it keeps its multi-column
+   layout at tablet widths where the page-wide rules would stack it. */
+.scrolly-pin .video-testi-grid{ grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:26px; }
+.scrolly-pin .video-testi{ aspect-ratio:3/4; }
+.scrolly-pin .testi-grid{ grid-template-columns:repeat(3,1fr); gap:20px; }
+.scrolly-pin .testi-card{ min-height:0; padding:24px; gap:18px; }
+.scrolly-pin .testi-card p{ font-size:15px; }
+
+.scrolly-pin .cta-inner{ padding:56px 52px; }
+
+/* ===== LIGHT (INVERTED) SECTIONS ===== */
+.section-invert{
+  --fg:#0a0a0a;
+  --surface:#ffffff;
+  --surface-2:#ebebe7;
+  --border:rgba(0,0,0,.16);
+  --border-soft:rgba(0,0,0,.09);
+  --muted:rgba(0,0,0,.58);
+  --dim:rgba(0,0,0,.38);
+  --shadow-card: 0 4px 20px -10px rgba(0,0,0,.18);
+  --shadow-card-hover: 0 26px 70px -26px rgba(0,0,0,.32);
+  --glow: 0 14px 44px -18px rgba(0,0,0,.35);
+  background:#f2f1ed;
+  color:#0a0a0a;
+}
+.section-invert .section-tag .sq{ background:#0a0a0a; }
+.section-invert .service-row:hover{ transform:translateY(-4px); }
+
+/* ===== RESPONSIVE ===== */
+/* Below 900px the full nav + language switch + CTA no longer fit on one line
+   and the links start wrapping — hand over to the hamburger instead. */
+@media (max-width:900px){
+  .nav{ display:none; }
+  .header-right{ display:none; }
+  .menu-btn{ display:flex; }
+}
+
+@media (max-width:1024px){
+  .stats-grid{ grid-template-columns:repeat(2,1fr); row-gap:48px; }
+  .stats-grid-small{ grid-template-columns:repeat(3,1fr); }
+  .work-grid{ grid-template-columns:repeat(2,1fr); }
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+  .process-grid{ grid-template-columns:repeat(2,1fr); }
+  .testi-grid{ grid-template-columns:1fr; }
+  .video-testi-grid{ grid-template-columns:repeat(3,1fr); }
+  .service-row .service-desc{ display:none; }
+  .hero-meta{ display:none; }
+}
+
+@media (max-width:768px){
+  .header{ padding:16px 0; }
+  .header-inner{ padding:0 20px; }
+  .nav{ display:none; }
+  .header-right{ display:none; }
+  .menu-btn{ display:flex; }
+  .hero{ height:200vh; }
+  .hero-intro{ padding:70px 0 20px; }
+  .hero-stages{ left:20px; bottom:130px; }
+  .hero-subtitle{ font-size:13px; padding:7px 14px; }
+  .hero-buttons{ flex-direction:column; width:100%; }
+  .hero-buttons .btn{ width:100%; justify-content:center; }
+  .services-head{ flex-direction:column; align-items:flex-start; }
+  .footer-grid{ grid-template-columns:1fr; }
+  .footer-form .pm-row{ grid-template-columns:1fr; }
+  .cta-inner{ flex-direction:column; align-items:flex-start; padding:44px 28px; border-radius:22px; }
+  .work-grid{ grid-template-columns:1fr 1fr; gap:14px; }
+  .work-card{ border-radius:12px; }
+  .work-info{ padding:14px; }
+  .work-info h3{ font-size:13px; }
+  .work-info span{ display:none; }
+  .stats-grid-small{ grid-template-columns:1fr; gap:28px; }
+  .process-grid{ grid-template-columns:1fr; }
+  .video-testi-grid{ grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:50px; }
+}
+
+/* Landscape phones: the hero has barely 380px of height, so the headline,
+   subtitle, stage caption and scroll hint start colliding. */
+@media (max-height:520px){
+  .hero{ height:170vh; }
+  .badge{ margin-bottom:14px; padding:6px 12px; font-size:10px; }
+  .hero-title-main{ font-size:clamp(30px,7.5vw,54px); }
+  .hero-subtitle{ margin-top:14px; font-size:12px; padding:6px 12px; }
+  .hero-stages{ left:18px; bottom:14px; }
+  .hero-stage{ font-size:clamp(14px,2.4vw,20px); }
+  .scroll-hint{ display:none; }
+  .hero-3d{ width:min(52vh,360px); height:min(52vh,360px); }
+}
+
+/* A pinned composition can't fit a phone screen — fall back to sequential
+   reveals in normal document flow, keeping the one-by-one rhythm. */
+@media (max-width:900px), (max-height:640px){
+  .scrolly{ height:auto !important; padding:96px 0 !important; }
+  .scrolly-pin{
+    position:static;
+    height:auto;
+    display:block;
+    overflow:visible;
+    padding:0;
+  }
+  /* Multi-column only exists to fit a pinned screen — undo it once unpinned. */
+  .scrolly-pin .testi-grid{ grid-template-columns:1fr; }
+  .scrolly-pin .video-testi-grid{ grid-template-columns:repeat(2,1fr); }
+  .scrolly-pin .video-testi{ aspect-ratio:9/16; }
+  .scrolly-pin .about-title{ font-size:clamp(24px,4.2vw,44px); }
+  /* The CTA card is itself the .container, so its own padding replaces the page
+     gutter — give it back a margin or the white card runs edge to edge. */
+  .scrolly-pin .cta-inner{ padding:44px 28px; width:calc(100% - 40px); margin:0 auto; }
+}
+
+/* A long word must never widen a grid column past its track. */
+.testi-grid > *, .work-grid > *, .process-grid > *, .stats-grid > *{ min-width:0; }
+
+/* Short-but-wide screens (landscape tablets) still pin, so the composition has
+   to shrink further or it slides up under the fixed header. */
+/* Landscape phones: no room for a pinned stage, so the works go back to a
+   plain two-column grid. */
+@media (max-height:640px){
+  .scrolly-pin .work-grid{
+    display:grid;
+    position:static;
+    grid-template-columns:1fr 1fr;
+    perspective:none;
+  }
+  .scrolly-pin .work-grid .work-card{
+    position:relative;
+    left:auto; top:auto;
+    width:auto;
+    aspect-ratio:var(--ar, 1/1);
+    opacity:1;
+  }
+  .scrolly-pin .work-grid .work-info{ position:absolute; top:auto; bottom:0; left:0; right:0; }
+  .scrolly-pin .work-grid .media-bg{ display:none; }
+}
+
+@media (min-width:901px) and (max-height:780px){
+  .scrolly-pin{ padding:82px 0 40px; }
+  .scrolly-pin .section-tag{ margin-bottom:12px; }
+  .scrolly-pin .about-title{ font-size:clamp(22px,2.6vw,32px); margin-bottom:18px; }
+  .scrolly-pin .stats-grid-wrap{ padding:34px 32px 0; }
+  .scrolly-pin .services-head{ margin-bottom:18px; }
+  .scrolly-pin .services-head h2{ font-size:clamp(26px,3.2vw,38px); }
+  .scrolly-pin .service-row{ padding:10px 20px; margin-bottom:7px; }
+  .scrolly-pin .service-row h3{ font-size:16px; }
+  .scrolly-pin .process-title{ margin-bottom:26px; font-size:clamp(26px,3.4vw,40px); }
+  .scrolly-pin .process-card{ padding:18px 16px; }
+  .scrolly-pin .work-title{ margin-bottom:20px; font-size:clamp(26px,3.4vw,40px); }
+  .scrolly-pin .testi-title{ margin-bottom:18px; font-size:clamp(24px,3vw,34px); }
+  .scrolly-pin .video-testi-grid{ margin-bottom:18px; gap:10px; }
+  .scrolly-pin .video-testi{ aspect-ratio:1/1; }
+  .scrolly-pin .testi-card{ padding:18px; gap:12px; }
+  .scrolly-pin .testi-card p{ font-size:13px; }
+  .scrolly-pin .cta-inner{ padding:38px 40px; }
+}
+
+/* ===== PROJECT / LEAD MODAL ===== */
+.project-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(6px);
+  z-index:2000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s var(--ease);
+}
+.project-modal-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+.project-modal{
+  width:100%;
+  max-width:480px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:var(--surface);
+  color:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:40px;
+  position:relative;
+  box-shadow: var(--shadow-card-hover);
+  transform:translateY(24px) scale(.98);
+  transition: transform .4s var(--ease);
+}
+.project-modal-overlay.open .project-modal{
+  transform:translateY(0) scale(1);
+}
+.project-modal-close{
+  position:absolute;
+  top:16px; right:16px;
+  width:42px; height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:none;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.project-modal-close:hover{ background:rgba(255,255,255,.08); }
+
+.pm-title{
+  font-family:var(--display);
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:uppercase;
+  margin-bottom:28px;
+}
+
+#projectForm{ display:flex; flex-direction:column; }
+.pm-label{
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+.pm-input{
+  width:100%;
+  background:none;
+  border:none;
+  border-bottom:1px solid var(--border);
+  color:#fff;
+  font-size:16px;
+  font-family:inherit;
+  padding:6px 0 14px;
+  margin-bottom:26px;
+  transition:border-color .25s;
+}
+.pm-input::placeholder{ color:var(--dim); }
+.pm-input:focus{ outline:none; border-color:#fff; }
+.pm-textarea{ resize:vertical; min-height:60px; }
+
+.pm-budget-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:28px;
+}
+.pm-budget-btn{
+  background:none;
+  border:1px solid var(--border);
+  color:#fff;
+  border-radius:10px;
+  padding:14px 10px;
+  font-size:14px;
+  font-family:inherit;
+  cursor:pointer;
+  transition: all .2s;
+}
+.pm-budget-btn:hover{ border-color:rgba(255,255,255,.5); }
+.pm-budget-btn.active{
+  background:#fff;
+  border-color:#fff;
+  color:#000;
+  font-weight:600;
+}
+
+.form-error{
+  color:#ff6b6b;
+  font-size:13px;
+  margin-bottom:14px;
+}
+.form-error:empty{ display:none; }
+
+.pm-submit{
+  width:100%;
+  background:#fff;
+  color:#000;
+  border:none;
+  padding:16px;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  cursor:pointer;
+  transition: opacity .2s, transform .2s;
+}
+.pm-submit:hover{ opacity:.85; }
+.pm-submit:active{ transform:scale(.98); }
+.pm-submit:disabled{ opacity:.5; cursor:not-allowed; }
+
+.pm-alt-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.pm-alt-btn{
+  text-align:center;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  font-size:13px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:#fff;
+  transition: background .2s, border-color .2s;
+}
+.pm-alt-btn:hover{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.35); }
+
+.pm-success{
+  text-align:center;
+  padding:20px 0;
+}
+.pm-success-icon{
+  width:56px; height:56px;
+  border-radius:50%;
+  background:#fff;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  margin:0 auto 20px;
+}
+.pm-success p{ font-size:16px; color:var(--muted); }
+
+@media (max-width:480px){
+  .project-modal{ padding:28px 22px; }
+  .pm-budget-grid{ grid-template-columns:1fr 1fr; }
+}
+
+/* ===== PORTFOLIO CASE VIEWER (on-site gallery) ===== */
+.case-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(6px);
+  z-index:2000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s var(--ease);
+}
+.case-modal-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+.case-modal{
+  width:100%;
+  max-width:640px;
+  max-height:92vh;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transform:translateY(24px) scale(.98);
+  transition: transform .4s var(--ease);
+}
+.case-modal-overlay.open .case-modal{
+  transform:translateY(0) scale(1);
+}
+.case-modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:20px 24px;
+  border-bottom:1px solid var(--border-soft);
+  flex-shrink:0;
+}
+.case-modal-head h3{
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+}
+.case-modal-close{
+  width:42px; height:42px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:none;
+  color:#fff;
+  font-size:14px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.case-modal-close:hover{ background:rgba(255,255,255,.1); }
+.case-modal-scroll{
+  overflow-y:auto;
+  background:var(--surface-2);
+}
+.case-modal-scroll img{
+  width:100%;
+  display:block;
+}
+
+/* Vibe coding lives on its own page. The brand carries no accent colour, so it
+   signals "different destination" with full opacity and the ↗ the CTA already
+   uses — not a tint. */
+.nav a.nav-vibe{ opacity:1; }
+
+
+/* A portfolio gallery can contain a PDF (brand book, presentation); it opens
+   in a new tab rather than pretending to be an image tile. */
+.case-pdf{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  padding:22px 24px; margin:0 0 14px;
+  border:1px solid var(--border); border-radius:14px;
+  background:var(--surface);
+  color:#fff; text-decoration:none;
+  transition:border-color .3s, background .3s;
+}
+.case-pdf:hover{ border-color:#fff; background:var(--surface-2); }
+.case-pdf-mark{
+  font-family:var(--mono); font-size:11px; letter-spacing:1.6px;
+  border:1px solid var(--border); border-radius:6px; padding:5px 9px;
+}
+.case-pdf-name{ flex:1 1 200px; font-size:14px; word-break:break-all; color:var(--muted); }
+.case-pdf-cta{ font-size:13px; font-weight:600; white-space:nowrap; }

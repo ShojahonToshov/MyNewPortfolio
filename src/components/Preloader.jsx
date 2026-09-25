@@ -19,10 +19,10 @@ export default function Preloader({ isLoading, onComplete }) {
   useEffect(() => {
     if (!isLoading) return; // Stop if already loaded
     if (index === words.length - 1) {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         onComplete();
       }, 800); // Wait a bit after the last word
-      return;
+      return () => clearTimeout(timeout);
     }
 
     const timeout = setTimeout(
