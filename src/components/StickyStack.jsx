@@ -5,17 +5,7 @@ export default function StickyStack() {
     <section className="w-full bg-[#0a0a0a] min-h-screen pt-32 pb-64 px-4 md:px-20 font-sans z-10 relative">
       <div className="max-w-6xl mx-auto flex flex-col gap-10">
         
-        {/* Title Section */}
-        <div className="mb-10 md:mb-20">
-           <div className="flex items-center gap-3 text-sm font-bold tracking-widest uppercase text-white/50 mb-4">
-              <div className="w-2 h-2 bg-white" />
-              TANLANGAN ISHLAR
-            </div>
-            <h2 className="text-white text-5xl md:text-7xl font-extrabold tracking-tighter uppercase leading-[0.9]">
-              PORTFOLIOMIZ
-            </h2>
-        </div>
-        
+
         {/* Project Cards */}
         {PROJECTS_DATA.map((proj, i) => {
           // Cards stick progressively lower
