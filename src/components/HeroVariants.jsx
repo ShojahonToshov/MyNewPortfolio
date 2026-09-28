@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { FiGithub as Github, FiLinkedin as Linkedin, FiMail as Mail, FiTwitter as Twitter } from "react-icons/fi";
 
@@ -69,13 +69,16 @@ const DottedBackground = () => (
 
 // Unified Mouse Glow matching the footer
 const MouseGlow = ({ color1, color2 }) => {
+  const glowRef = useRef(null);
   const mouseX = useMotionValue(-500);
   const mouseY = useMotionValue(-500);
   
   useEffect(() => {
     const handleMouseMove = (e) => {
-      mouseX.set(e.clientX - 500);
-      mouseY.set(e.clientY - 500);
+      const bounds = glowRef.current?.offsetParent?.getBoundingClientRect();
+      if (!bounds) return;
+      mouseX.set(e.clientX - bounds.left - 500);
+      mouseY.set(e.clientY - bounds.top - 500);
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
@@ -83,7 +86,8 @@ const MouseGlow = ({ color1, color2 }) => {
 
   return (
     <motion.div
-      className="fixed pointer-events-none opacity-50 z-0 w-[1000px] h-[1000px] rounded-full"
+      ref={glowRef}
+      className="absolute pointer-events-none opacity-50 z-0 w-[1000px] h-[1000px] rounded-full"
       style={{
         x: mouseX,
         y: mouseY,
@@ -170,7 +174,7 @@ const HeroSocials = () => {
 // =====================================================================
 export default function HeroVariantsSwitcher() {
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-[#0a0a0a] flex flex-col items-center justify-center font-sans">
+    <section id="home" className="relative w-full min-h-screen overflow-hidden bg-[#0a0a0a] flex flex-col items-center justify-center font-sans">
       
       {/* Global Background Effects */}
       <MouseGlow color1="#ffffff" color2="#333333" />

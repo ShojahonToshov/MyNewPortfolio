@@ -4,9 +4,11 @@ import Lenis from "lenis";
 
 import CustomCursor from "../components/CustomCursor";
 import HeroVariantsSwitcher from "../components/HeroVariants";
+import FloatingNavbar from "../components/FloatingNavbar";
 
 const StickyStack = lazy(() => import("../components/StickyStack"));
 const FooterMinimalistMono = lazy(() => import("../components/Footers").then(m => ({ default: m.FooterMinimalistMono })));
+const About = lazy(() => import("../components/About"));
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -25,6 +27,8 @@ export default function Home() {
     // Only initialize Lenis smooth scroll on non-touch devices for better mobile UX
     if (!isTouch) {
       lenis = new Lenis({ lerp: 0.05, smoothWheel: true });
+      window.lenis = lenis; // Expose globally for FloatingNavbar
+      
       function raf(time) {
         lenis.raf(time);
         frameId = requestAnimationFrame(raf);
@@ -34,7 +38,10 @@ export default function Home() {
     
     return () => { 
       if (frameId) cancelAnimationFrame(frameId); 
-      if (lenis) lenis.destroy(); 
+      if (lenis) {
+        lenis.destroy(); 
+        delete window.lenis;
+      }
     };
   }, []);
 
@@ -47,10 +54,16 @@ export default function Home() {
         </div>
       )}
       
+      {/* Floating Navbar */}
+      <FloatingNavbar />
+      
       {/* Pro Hero Section with 5 Variants and built-in transition */}
       <HeroVariantsSwitcher />
 
       <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+        {/* ABOUT & TECH STACK */}
+        <About />
+
         {/* NEW STICKY STACK SHOWCASE REPLACING TUNNEL */}
         <StickyStack />
 

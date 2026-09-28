@@ -112,6 +112,7 @@ function MinimalistSplitBase({
 
   return (
     <section 
+      id="contact"
       onMouseMove={handleMouseMove}
       className="min-h-screen flex flex-col justify-end py-10 px-4 md:px-10 bg-[#111] overflow-hidden relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] group/section"
     >
