@@ -44,25 +44,12 @@ const wrap = (min, max, v) => {
 
 const MarqueeRow = ({ items, direction = "left", baseVelocity = 2 }) => {
   const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400
-  });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-    clamp: false
-  });
 
   const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
   const directionFactor = useRef(direction === "left" ? -1 : 1);
 
   useAnimationFrame((t, delta) => {
     let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
-    
-    // Add velocity-based speed boost
-    let speedMult = Math.abs(velocityFactor.get());
-    moveBy += directionFactor.current * speedMult * (delta / 1000) * 10; 
 
     baseX.set(baseX.get() + moveBy);
   });
@@ -76,7 +63,7 @@ const MarqueeRow = ({ items, direction = "left", baseVelocity = 2 }) => {
       
       <motion.div 
         className="flex w-max"
-        style={{ x }}
+        style={{ x, willChange: "transform" }}
       >
         <RepeatedItems items={repeatedItems} />
         <RepeatedItems items={repeatedItems} />
@@ -115,7 +102,7 @@ export default function About() {
             Expertise
           </motion.p>
           
-          <motion.div style={{ y: yText }}>
+          <motion.div style={{ y: yText, willChange: "transform" }}>
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
               Fullstack <br />
               <span className="text-transparent" style={{ WebkitTextStroke: "1px black" }}>Developer.</span>
@@ -185,8 +172,8 @@ export default function About() {
 
       {/* Infinite Marquee - Runs across the full width below the grids */}
       <div className="mt-32 w-full flex flex-col gap-4 border-y border-black/10 py-12 bg-[#0a0a0a] relative z-10">
-        <MarqueeRow items={frontendSkills} direction="left" speed={60} />
-        <MarqueeRow items={backendSkills} direction="right" speed={60} />
+        <MarqueeRow items={frontendSkills} direction="right" />
+        <MarqueeRow items={backendSkills} direction="left" />
       </div>
 
     </section>

@@ -45,7 +45,8 @@ const Card = ({ proj, i, wheelRotateX }) => {
         // Adjusted radius for taller cards.
         z: "clamp(500px, 75vh, 1000px)",
         opacity,
-        scale
+        scale,
+        willChange: "transform, opacity"
       }}
       // Critically, we MUST define the transformTemplate to ensure translate is applied BEFORE rotation and Z translation.
       // Otherwise, the wheel math breaks entirely in Framer Motion.
@@ -158,7 +159,6 @@ export default function StickyStack() {
           left: 0,
           top: 0,
           background: `radial-gradient(circle, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.01) 40%, transparent 70%)`,
-          filter: "blur(40px)",
         }}
       />
       

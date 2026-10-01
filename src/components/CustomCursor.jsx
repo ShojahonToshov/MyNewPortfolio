@@ -62,6 +62,7 @@ export default function CustomCursor() {
         y: cursorY,
         translateX: "-50%",
         translateY: "-50%",
+        willChange: "transform, width, height"
       }}
       variants={variants}
       animate={cursorType}

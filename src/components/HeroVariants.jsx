@@ -68,7 +68,6 @@ const MouseGlow = ({ color1, color2 }) => {
         left: 0,
         top: 0,
         background: `radial-gradient(circle, ${color1} 0%, ${color2} 30%, transparent 80%)`,
-        filter: "blur(60px)",
       }}
     />
   );
@@ -92,7 +91,7 @@ const BHElectric = () => (
              ease: "linear",
              delay: -(i * 0.5) 
            }}
-           style={{ width: '97vh', height: '97vh' }}
+           style={{ width: '97vh', height: '97vh', willChange: "transform" }}
          >
            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-[1px] bg-white shadow-[0_0_20px_white] rounded-full" />
            {i % 2 === 0 && (
