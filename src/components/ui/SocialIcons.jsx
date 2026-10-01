@@ -36,7 +36,7 @@ export const SocialIcons = ({ className = "", hoverBg = "#E0FF4F", hoverText = "
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ scale: 1.1, backgroundColor: hoverBg, color: hoverText, borderColor: hoverBg }}
-          className={`w-14 h-14 md:w-16 md:h-16 rounded-full border ${border} flex items-center justify-center transition-colors duration-300 z-20`}
+          className={`w-12 h-12 md:w-14 md:h-14 rounded-full border ${border} flex items-center justify-center transition-colors duration-300 z-20`}
           style={{ color: "inherit" }}
         >
           <Icon size={24} strokeWidth={1.5} />

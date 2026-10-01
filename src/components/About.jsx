@@ -63,7 +63,7 @@ export default function About() {
   const yText = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-white text-black flex flex-col justify-center overflow-hidden pt-32 pb-16 z-10 border-t border-black/10" id="about">
+    <section ref={containerRef} className="relative w-full min-h-screen bg-white text-black flex flex-col justify-center overflow-hidden pt-32 pb-0 z-10 border-t border-black/10" id="about">
       
       {/* Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />

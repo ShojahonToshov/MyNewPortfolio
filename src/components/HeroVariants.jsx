@@ -172,7 +172,10 @@ export default function HeroVariantsSwitcher() {
         <ProExploreButton />
       </motion.div>
 
-      <SocialIcons className="absolute bottom-16 left-6 md:left-10 z-30 pointer-events-auto text-white" />
+      <SocialIcons 
+        className="absolute bottom-16 left-6 md:left-10 z-30 pointer-events-auto text-white flex-col" 
+        hoverBg="#ffffff" 
+      />
 
     </section>
   );

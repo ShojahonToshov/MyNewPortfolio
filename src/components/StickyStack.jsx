@@ -152,13 +152,13 @@ export default function StickyStack() {
       
       <DottedBackground />
 
-      {/* Header - Normal flow so it scrolls out of view naturally, but with reduced spacing */}
-      <div className="pt-8 md:pt-12 px-4 md:px-20 pb-0 w-full z-30 relative pointer-events-none">
+      {/* Header - Normal flow so it scrolls out of view naturally, but with increased breathing room */}
+      <div className="pt-8 md:pt-12 px-4 md:px-20 pb-4 md:pb-8 w-full z-30 relative pointer-events-none">
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-sm font-bold uppercase tracking-widest text-black/50 mb-1"
+          className="text-sm font-bold uppercase tracking-widest text-black/50 mb-2 md:mb-3"
         >
           Selected Works
         </motion.p>
