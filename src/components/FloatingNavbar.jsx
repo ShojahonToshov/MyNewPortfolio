@@ -76,7 +76,7 @@ export default function FloatingNavbar() {
       initial={{ y: -100, opacity: 0, x: "-50%" }}
       animate={{ y: 0, opacity: 1, x: "-50%" }}
       transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-6 md:top-8 left-1/2 z-[100] flex items-center gap-1 p-1.5 rounded-full bg-black/50 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+      className="fixed top-6 md:top-8 left-1/2 z-[100] flex items-center gap-1 p-1.5 rounded-full bg-black/50 backdrop-blur-2xl border border-white/10 shadow-[0_12px_30px_rgba(0,0,0,0.08)]"
     >
       {navLinks.map((link) => (
         <a

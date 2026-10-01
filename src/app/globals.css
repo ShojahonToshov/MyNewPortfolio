@@ -49,3 +49,9 @@ html, body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}

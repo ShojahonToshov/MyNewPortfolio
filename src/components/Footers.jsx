@@ -1,95 +1,14 @@
+import { MagneticButton } from "./ui/MagneticButton";
+import { SocialIcons } from "./ui/SocialIcons";
 import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { FiGithub as Github, FiLinkedin as Linkedin, FiMail as Mail, FiTwitter as Twitter, FiArrowUpRight as ArrowUpRight } from "react-icons/fi";
-
-// Common Magnetic Button (Refactored to anchor tag for semantic linking)
-export function MagneticButton({ children, className, href, ...props }) {
-  const ref = useRef(null);
-  const bounds = useRef(null);
-  
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  
-  const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
-  const handleMouseEnter = () => {
-    bounds.current = ref.current.getBoundingClientRect();
-  };
-
-  const handleMouse = (e) => {
-    if (!bounds.current) return;
-    const { clientX, clientY } = e;
-    const { height, width, left, top } = bounds.current;
-    const middleX = clientX - (left + width / 2);
-    const middleY = clientY - (top + height / 2);
-    x.set(middleX * 0.3);
-    y.set(middleY * 0.3);
-  };
-
-  const reset = () => {
-    x.set(0);
-    y.set(0);
-    bounds.current = null;
-  };
-
-  return (
-    <motion.a
-      href={href || "#"}
-      ref={ref}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouse}
-      onMouseLeave={reset}
-      style={{ x: springX, y: springY }}
-      className={className}
-      {...props}
-    >
-      {children}
-    </motion.a>
-  );
-}
 
 // Background Component (Dotted)
 const DottedBackground = () => (
   <div className="absolute inset-0 pointer-events-none opacity-20 z-0" style={{ backgroundImage: 'radial-gradient(circle at center, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 );
 
-// Generic Social Icons Component with Entrance Animation
-const SocialIcons = ({ className = "", hoverBg = "#E0FF4F", hoverText = "#000", border = "border-white/30" }) => {
-  const containerVariants = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.1 } }
-  };
-  const iconVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    show: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 200, damping: 12 } }
-  };
-
-  return (
-    <motion.div 
-      variants={containerVariants} 
-      initial="hidden" 
-      whileInView="show" 
-      viewport={{ once: true }} 
-      className={`flex gap-4 md:gap-8 ${className}`}
-    >
-      {[Github, Linkedin, Twitter, Mail].map((Icon, idx) => (
-        <motion.a
-          variants={iconVariants}
-          key={idx} href="#" 
-          whileHover={{ scale: 1.1, backgroundColor: hoverBg, color: hoverText, borderColor: hoverBg }}
-          className={`w-14 h-14 md:w-16 md:h-16 rounded-full border ${border} flex items-center justify-center transition-colors duration-300 z-20`}
-          style={{ color: "inherit" }}
-        >
-          <Icon size={24} strokeWidth={1.5} />
-        </motion.a>
-      ))}
-    </motion.div>
-  );
-};
-
-// Helper for variants
 function MinimalistSplitBase({ 
   bgBox = "bg-[#E0FF4F]", 
   bgButton = "bg-[#FF2A2A] text-white border-white", 
@@ -98,10 +17,15 @@ function MinimalistSplitBase({
   iconColorHover = "hover:text-[#FF2A2A]",
   decorColor = "border-black/20"
 }) {
-  // GPU-Accelerated coordinates for the glow effect
   const mouseX = useMotionValue(-500);
   const mouseY = useMotionValue(-500);
   const sectionRef = useRef(null);
+  const bounds = useRef({ left: 0, top: 0 });
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("idle"); // idle, loading, success, error
 
   useEffect(() => {
     const updateBounds = () => {
@@ -117,17 +41,31 @@ function MinimalistSplitBase({
     return () => window.removeEventListener("resize", updateBounds);
   }, []);
 
-  const bounds = useRef({ left: 0, top: 0 });
-
   function handleMouseMove({ pageX, pageY }) {
     mouseX.set(pageX - bounds.current.left - 500);
     mouseY.set(pageY - bounds.current.top - 500);
   }
 
-  const textContainer = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, message }),
+      });
+      if (res.ok) {
+        setStatus("success");
+        setTimeout(() => { setIsFormOpen(false); setStatus("idle"); setEmail(""); setMessage(""); }, 3000);
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      setStatus("error");
+    }
   };
+
   const textItem = {
     hidden: { opacity: 0, y: 30 },
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
@@ -138,9 +76,8 @@ function MinimalistSplitBase({
       id="contact"
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="min-h-screen flex flex-col justify-end py-10 px-4 md:px-10 bg-[#111] overflow-hidden relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] group/section"
+      className="min-h-screen flex flex-col justify-end py-10 px-4 md:px-10 bg-[#111] overflow-hidden relative z-20 group/section"
     >
-      {/* Optimized Glow Layer: Uses static background and GPU transforms instead of string recalculation */}
       <motion.div
         className="absolute pointer-events-none opacity-30 group-hover/section:opacity-60 transition-opacity duration-1000 z-0 w-[1000px] h-[1000px] rounded-full"
         style={{
@@ -162,36 +99,61 @@ function MinimalistSplitBase({
             viewport={{ once: true, amount: 0.2 }}
             className={`${bgBox} rounded-[40px] w-full max-w-6xl md:h-[60vh] flex flex-col md:flex-row items-center justify-between p-10 md:p-20 shadow-2xl relative overflow-hidden`}
          >
-            {/* CSS-based infinite rotation is better for the Main Thread than JS-based Framer Motion for simple infinite loops */}
-            <div 
-              style={{ animation: 'spin 60s linear infinite reverse' }}
-              className={`absolute -right-80 -top-80 w-[1000px] h-[1000px] border-[1px] ${decorColor} rounded-full border-dashed pointer-events-none opacity-50`}
-            />
-            <div 
-              style={{ animation: 'spin 50s linear infinite' }}
-              className={`absolute -right-60 -top-60 w-[800px] h-[800px] border-[1px] ${decorColor} rounded-full border-dotted pointer-events-none opacity-50`}
-            />
-            <div 
-              style={{ animation: 'spin 40s linear infinite' }}
-              className={`absolute -right-40 -top-40 w-[600px] h-[600px] border-[1px] ${decorColor} rounded-full border-dashed pointer-events-none opacity-50`}
-            />
-            <div 
-              style={{ animation: 'spin 30s linear infinite reverse' }}
-              className={`absolute -right-20 -top-20 w-[400px] h-[400px] border-[1px] ${decorColor} rounded-full border-dotted pointer-events-none opacity-50`}
-            />
-            <div 
-              style={{ animation: 'spin 20s linear infinite' }}
-              className={`absolute right-0 top-0 w-[200px] h-[200px] border-[1px] ${decorColor} rounded-full border-dashed pointer-events-none opacity-50`}
-            />
+            <div style={{ animation: 'spin 60s linear infinite reverse' }} className={`absolute -right-80 -top-80 w-[1000px] h-[1000px] border-[1px] ${decorColor} rounded-full border-dashed pointer-events-none opacity-50`} />
+            <div style={{ animation: 'spin 50s linear infinite' }} className={`absolute -right-60 -top-60 w-[800px] h-[800px] border-[1px] ${decorColor} rounded-full border-dotted pointer-events-none opacity-50`} />
+            <div style={{ animation: 'spin 40s linear infinite' }} className={`absolute -right-40 -top-40 w-[600px] h-[600px] border-[1px] ${decorColor} rounded-full border-dashed pointer-events-none opacity-50`} />
+            <div style={{ animation: 'spin 30s linear infinite reverse' }} className={`absolute -right-20 -top-20 w-[400px] h-[400px] border-[1px] ${decorColor} rounded-full border-dotted pointer-events-none opacity-50`} />
+            <div style={{ animation: 'spin 20s linear infinite' }} className={`absolute right-0 top-0 w-[200px] h-[200px] border-[1px] ${decorColor} rounded-full border-dashed pointer-events-none opacity-50`} />
             
-            <motion.div variants={textContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} className={`z-10 ${colorText} mb-10 md:mb-0`}>
-              <motion.p variants={textItem} className={`text-sm font-bold uppercase tracking-widest mb-4 opacity-70`}>Drop me a line</motion.p>
-              <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-tight">
-                <motion.span className="block" variants={textItem}>Let's talk</motion.span>
-                <motion.span className="block" variants={textItem}>about your</motion.span>
-                <motion.span className="block" variants={textItem}>next idea.</motion.span>
-              </h2>
-            </motion.div>
+            <div className={`z-10 ${colorText} mb-10 md:mb-0 w-full md:w-1/2`}>
+              {!isFormOpen ? (
+                <motion.div initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }} variants={{ show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } } }}>
+                  <motion.p variants={textItem} className="text-sm font-bold uppercase tracking-widest mb-4 opacity-70">Drop me a line</motion.p>
+                  <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-tight">
+                    <motion.span className="block" variants={textItem}>Let's talk</motion.span>
+                    <motion.span className="block" variants={textItem}>about your</motion.span>
+                    <motion.span className="block" variants={textItem}>next idea.</motion.span>
+                  </h2>
+                </motion.div>
+              ) : (
+                <motion.form 
+                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+                  onSubmit={handleSubmit} 
+                  className="flex flex-col gap-4 w-full pr-0 md:pr-10"
+                >
+                  <h3 className="text-3xl font-black tracking-tighter mb-2">Send a Message</h3>
+                  <input 
+                    type="email" 
+                    required 
+                    placeholder="Your Email" 
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-black placeholder-black/50 outline-none focus:border-black/30 transition-colors"
+                  />
+                  <textarea 
+                    required 
+                    placeholder="How can I help you?" 
+                    rows={4}
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    className="w-full bg-black/5 border border-black/10 rounded-xl px-4 py-3 text-black placeholder-black/50 outline-none focus:border-black/30 transition-colors resize-none"
+                  />
+                  <div className="flex items-center gap-4 mt-2">
+                    <button 
+                      type="submit" 
+                      disabled={status === "loading" || status === "success"}
+                      className="px-8 py-3 bg-black text-white font-bold rounded-xl hover:bg-black/80 transition-colors disabled:opacity-50"
+                    >
+                      {status === "loading" ? "Sending..." : status === "success" ? "Sent!" : "Send"}
+                    </button>
+                    <button type="button" onClick={() => setIsFormOpen(false)} className="text-sm font-bold opacity-50 hover:opacity-100 transition-opacity">
+                      Cancel
+                    </button>
+                  </div>
+                  {status === "error" && <p className="text-red-500 text-sm font-bold mt-2">Failed to send. Try again.</p>}
+                </motion.form>
+              )}
+            </div>
             
             <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -200,10 +162,12 @@ function MinimalistSplitBase({
                 viewport={{ once: true }}
                 className="z-10"
             >
-              <MagneticButton href="#" className={`${bgButton} w-40 h-40 rounded-full border flex flex-col items-center justify-center hover:bg-white ${iconColorHover} transition-colors group shadow-2xl`}>
-                <ArrowUpRight size={40} className="group-hover:rotate-45 transition-transform" />
-                <span className="font-bold mt-2">Email</span>
-              </MagneticButton>
+              {!isFormOpen && (
+                <MagneticButton as="button" onClick={() => setIsFormOpen(true)} className={`${bgButton} w-40 h-40 rounded-full border flex flex-col items-center justify-center hover:bg-white ${iconColorHover} transition-colors group shadow-2xl cursor-pointer`}>
+                  <ArrowUpRight size={40} strokeWidth={2.5} className="group-hover:rotate-45 transition-transform" />
+                  <span className="font-bold mt-2">Email</span>
+                </MagneticButton>
+              )}
             </motion.div>
          </motion.div>
       </div>
@@ -234,4 +198,7 @@ export const FooterMinimalistMono = () => (
     decorColor="border-black/20"
   />
 );
+
+
+
 

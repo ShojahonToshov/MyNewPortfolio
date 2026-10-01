@@ -1,7 +1,8 @@
 import { useRef, useEffect } from "react";
 import { PROJECTS_DATA } from "../constants/data";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
-import { MagneticButton } from "./Footers";
+import { MagneticButton } from "./ui/MagneticButton";
+import Image from "next/image";
 import { FiArrowUpRight } from "react-icons/fi";
 
 const angle = 360 / PROJECTS_DATA.length;
@@ -73,13 +74,7 @@ const Card = ({ proj, i, wheelRotateX }) => {
       
       {/* Image Area */}
       <div className="w-full md:w-1/2 h-full absolute md:relative inset-0 md:inset-auto bg-black overflow-hidden">
-        <img 
-          src={`${proj.img}&fm=webp`} 
-          alt={proj.title} 
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover opacity-50 md:opacity-80 transition-transform duration-1000 group-hover:scale-110" 
-        />
+        <Image src={`${proj.img}&fm=webp&q=75`} alt={proj.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-50 md:opacity-80 transition-transform duration-1000 group-hover:scale-110" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#111] via-[#111]/30 to-transparent opacity-0 md:opacity-100 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/80 to-transparent md:hidden pointer-events-none" />
       </div>
@@ -172,7 +167,7 @@ export default function StickyStack() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-5xl md:text-[7vw] font-black uppercase tracking-tighter text-black leading-none"
+          className="text-5xl md:text-[7vw] font-black uppercase tracking-wider text-black leading-none"
         >
           Projects
         </motion.h2>
@@ -204,3 +199,4 @@ export default function StickyStack() {
     </section>
   );
 }
+

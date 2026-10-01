@@ -88,7 +88,7 @@ export default function About() {
               Fullstack <br />
               <span className="text-transparent" style={{ WebkitTextStroke: "1px black" }}>Developer.</span>
             </h2>
-            <div className="text-lg md:text-xl text-black/70 space-y-6 font-medium leading-relaxed">
+            <div className="text-lg md:text-xl text-black/70 space-y-6 font-medium leading-relaxed max-w-xl">
               <p>
                 I build scalable web applications designed to drive real business results. My focus is on creating seamless digital products that engage users, optimize workflows, and deliver measurable value from day one.
               </p>
@@ -113,7 +113,7 @@ export default function About() {
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                 <SiJavascript className="w-24 h-24" />
               </div>
-              <h3 className="text-white/50 text-sm font-bold uppercase tracking-widest mb-8 relative z-10">Frontend</h3>
+              <h3 className="text-white/80 text-sm font-bold uppercase tracking-widest mb-8 relative z-10">Frontend</h3>
               <div className="flex flex-wrap gap-3 relative z-10">
                 {frontendSkills.slice(0, 5).map((s, i) => (
                   <div key={i} className="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-full border border-white/5 backdrop-blur-md">
@@ -130,12 +130,12 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-[#111] border border-white/10 rounded-3xl p-8 hover:bg-[#151515] hover:border-white/20 transition-all group shadow-2xl relative overflow-hidden md:translate-y-8"
+              className="bg-[#111] border border-white/10 rounded-3xl p-8 hover:bg-[#151515] hover:border-white/20 transition-all group shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden md:translate-y-8 z-10"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                 <SiPython className="w-24 h-24" />
               </div>
-              <h3 className="text-white/50 text-sm font-bold uppercase tracking-widest mb-8 relative z-10">Backend</h3>
+              <h3 className="text-white/80 text-sm font-bold uppercase tracking-widest mb-8 relative z-10">Backend</h3>
               <div className="flex flex-wrap gap-3 relative z-10">
                 {backendSkills.slice(0, 5).map((s, i) => (
                   <div key={i} className="flex items-center gap-2 bg-black/60 px-4 py-2 rounded-full border border-white/5 backdrop-blur-md">

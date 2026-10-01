@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react';
 import './EntryExperience.css';
 
 export default function EntryExperience({ children }) {
-  const [running, setRunning] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [running, setRunning] = useState(true);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setRunning(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+  }, []);
   useEffect(() => {
     if (!running) return;
     const previousOverflow = document.body.style.overflow;

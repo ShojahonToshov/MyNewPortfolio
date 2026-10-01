@@ -1,3 +1,5 @@
+import { MagneticButton } from "./ui/MagneticButton";
+import { SocialIcons } from "./ui/SocialIcons";
 import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { FiGithub as Github, FiLinkedin as Linkedin, FiMail as Mail, FiTwitter as Twitter } from "react-icons/fi";
@@ -10,53 +12,6 @@ const NameCorner = ({ mixBlend = "mix-blend-normal", delay = 0.5 }) => (
     <h2 className="text-white text-3xl font-bold tracking-tighter">Shojahon Toshov</h2>
   </motion.div>
 );
-
-export function MagneticButton({ children, className, href, ...props }) {
-  const ref = useRef(null);
-  const bounds = useRef(null);
-  
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  
-  const springConfig = { stiffness: 150, damping: 15, mass: 0.1 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
-  const handleMouseEnter = () => {
-    bounds.current = ref.current.getBoundingClientRect();
-  };
-
-  const handleMouse = (e) => {
-    if (!bounds.current) return;
-    const { clientX, clientY } = e;
-    const { height, width, left, top } = bounds.current;
-    const middleX = clientX - (left + width / 2);
-    const middleY = clientY - (top + height / 2);
-    x.set(middleX * 0.3);
-    y.set(middleY * 0.3);
-  };
-
-  const reset = () => {
-    x.set(0);
-    y.set(0);
-    bounds.current = null;
-  };
-
-  return (
-    <motion.a
-      href={href || "#"}
-      ref={ref}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouse}
-      onMouseLeave={reset}
-      style={{ x: springX, y: springY }}
-      className={className}
-      {...props}
-    >
-      {children}
-    </motion.a>
-  );
-}
 
 // Pro-level Explore Button
 const ProExploreButton = () => (
@@ -176,7 +131,7 @@ const HeroSocials = () => {
           variants={iconVariants}
           key={idx} href="#" 
           whileHover={{ scale: 1.1, backgroundColor: hoverBg, color: hoverText, borderColor: hoverBg }}
-          className={`w-14 h-14 md:w-16 md:h-16 rounded-full border ${border} flex items-center justify-center transition-colors duration-300 z-20`}
+          className={`w-12 h-12 md:w-14 md:h-14 rounded-full border ${border} flex items-center justify-center transition-colors duration-300 z-20`}
           style={{ color: "inherit" }}
         >
           <Icon size={24} strokeWidth={1.5} />
@@ -210,15 +165,17 @@ export default function HeroVariantsSwitcher() {
       {/* FOREGROUND CONTENT (z-20) */}
       <div className="relative z-20 text-center pointer-events-none flex flex-col items-center">
         <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1, ease: "easeOut" }} className="text-[15vw] md:text-[12vw] font-black uppercase tracking-tighter leading-none text-white drop-shadow-2xl">Creative</motion.h1>
-        <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1, delay: 0.1, ease: "easeOut" }} className="text-[15vw] md:text-[12vw] font-black uppercase tracking-tighter leading-none text-transparent drop-shadow-2xl" style={{ WebkitTextStroke: "2px white" }}>Engineer</motion.h1>
+        <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1, delay: 0.1, ease: "easeOut" }} className="text-[15vw] md:text-[12vw] font-black uppercase tracking-tighter leading-none text-transparent drop-shadow-2xl" style={{ WebkitTextStroke: "3px white" }}>Engineer</motion.h1>
       </div>
       
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="absolute bottom-24 right-6 md:bottom-16 md:right-16 z-30 pointer-events-auto">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="absolute bottom-24 right-10 md:bottom-16 md:right-24 z-30 pointer-events-auto">
         <ProExploreButton />
       </motion.div>
 
-      <HeroSocials />
+      <SocialIcons className="absolute bottom-16 left-6 md:left-10 z-30 pointer-events-auto text-white" />
 
     </section>
   );
 }
+
+
