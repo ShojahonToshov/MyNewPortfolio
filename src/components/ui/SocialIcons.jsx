@@ -23,8 +23,7 @@ export const SocialIcons = ({ className = "", hoverBg = "#E0FF4F", hoverText = "
     <motion.div 
       variants={containerVariants} 
       initial="hidden" 
-      whileInView="show" 
-      viewport={{ once: true }} 
+      animate="show" 
       className={`flex gap-4 md:gap-8 ${className}`}
     >
       {socials.map(({ Icon, label, href }, idx) => (

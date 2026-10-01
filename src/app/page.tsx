@@ -18,6 +18,24 @@ export default function Home() {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    // FIX: Уничтожаем старые Service Worker-ы и кэши от других проектов на localhost
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+          console.log('Stray ServiceWorker unregistered!');
+        }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then((names) => {
+        for (let name of names) {
+          caches.delete(name);
+          console.log('Cache cleared: ', name);
+        }
+      });
+    }
+
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     setIsTouchDevice(isTouch);
     

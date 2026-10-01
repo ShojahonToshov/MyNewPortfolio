@@ -1,7 +1,7 @@
 import { MagneticButton } from "./ui/MagneticButton";
 import { SocialIcons } from "./ui/SocialIcons";
 import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useAnimation } from "framer-motion";
 import { FiGithub as Github, FiLinkedin as Linkedin, FiMail as Mail, FiTwitter as Twitter } from "react-icons/fi";
 
 // =====================================================================
@@ -123,7 +123,8 @@ const HeroSocials = () => {
     <motion.div 
       variants={containerVariants} 
       initial="hidden" 
-      animate="show" 
+      whileInView="show" 
+      viewport={{ once: true }}
       className="absolute bottom-16 left-6 md:left-10 z-30 flex flex-col gap-4 md:gap-6 pointer-events-auto text-white"
     >
       {[Github, Linkedin, Twitter, Mail].map((Icon, idx) => (
@@ -138,6 +139,50 @@ const HeroSocials = () => {
         </motion.a>
       ))}
     </motion.div>
+  );
+};
+
+
+
+const MaskedText = ({ text, delay = 0, outlined = false }) => {
+  const letters = text.split("");
+  const controls = useAnimation();
+
+  useEffect(() => {
+    // Explicitly trigger the animation on mount to bypass Next.js Fast Refresh bugs
+    controls.start("show");
+  }, [controls]);
+
+  const className = `text-[15vw] md:text-[12vw] font-black uppercase tracking-tighter leading-none ${outlined ? 'text-transparent drop-shadow-2xl' : 'text-white drop-shadow-2xl'}`;
+  const style = outlined ? { WebkitTextStroke: "2px white" } : {};
+
+  return (
+    <div className="flex overflow-hidden pb-4 -mb-4">
+      {letters.map((char, index) => (
+        <motion.span 
+          key={index} 
+          initial="hidden"
+          animate={controls}
+          variants={{
+            hidden: { y: "120%", rotate: 15, opacity: 0 },
+            show: { 
+              y: "0%", 
+              rotate: 0, 
+              opacity: 1, 
+              transition: { 
+                duration: 1, 
+                ease: [0.16, 1, 0.3, 1],
+                delay: delay + (index * 0.05)
+              } 
+            }
+          }}
+          className={className}
+          style={{ ...style, display: "inline-block", whiteSpace: "pre" }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </div>
   );
 };
 
@@ -164,8 +209,8 @@ export default function HeroVariantsSwitcher() {
 
       {/* FOREGROUND CONTENT (z-20) */}
       <div className="relative z-20 text-center pointer-events-none flex flex-col items-center">
-        <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1, ease: "easeOut" }} className="text-[15vw] md:text-[12vw] font-black uppercase tracking-tighter leading-none text-white drop-shadow-2xl">Creative</motion.h1>
-        <motion.h1 initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1, delay: 0.1, ease: "easeOut" }} className="text-[15vw] md:text-[12vw] font-black uppercase tracking-tighter leading-none text-transparent drop-shadow-2xl" style={{ WebkitTextStroke: "3px white" }}>Engineer</motion.h1>
+        <MaskedText text="Creative" delay={0.2} />
+        <MaskedText text="Engineer" delay={0.5} outlined={true} />
       </div>
       
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="absolute bottom-24 right-10 md:bottom-16 md:right-24 z-30 pointer-events-auto">
