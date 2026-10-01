@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import useCursorStore from "../store/useCursorStore";
 
 export default function CustomCursor() {
-  const [cursorState, setCursorState] = useState("default"); // default, hover, text
-  const [cursorText, setCursorText] = useState("");
+  const { cursorType, cursorText } = useCursorStore();
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
@@ -19,36 +21,10 @@ export default function CustomCursor() {
       mouseY.set(e.clientY);
     };
 
-    const handleMouseOver = (e) => {
-      const target = e.target;
-      
-      // Look up the DOM tree for a data-cursor attribute
-      const cursorElement = target.closest("[data-cursor]");
-      
-      if (cursorElement) {
-        const type = cursorElement.getAttribute("data-cursor");
-        if (type === "hover") {
-          setCursorState("hover");
-          setCursorText("");
-        } else {
-          setCursorState("text");
-          setCursorText(type);
-        }
-      } else if (target.closest("a") || target.closest("button")) {
-        setCursorState("hover");
-        setCursorText("");
-      } else {
-        setCursorState("default");
-        setCursorText("");
-      }
-    };
-
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseover", handleMouseOver);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseover", handleMouseOver);
     };
   }, [mouseX, mouseY]);
 
@@ -88,12 +64,12 @@ export default function CustomCursor() {
         translateY: "-50%",
       }}
       variants={variants}
-      animate={cursorState}
+      animate={cursorType}
       initial="default"
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       <AnimatePresence>
-        {cursorState === "text" && (
+        {cursorType === "text" && (
           <motion.span
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -107,3 +83,4 @@ export default function CustomCursor() {
     </motion.div>
   );
 }
+

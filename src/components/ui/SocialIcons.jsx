@@ -2,7 +2,11 @@
 import { motion } from "framer-motion";
 import { FiGithub as Github, FiLinkedin as Linkedin, FiMail as Mail, FiTwitter as Twitter } from "react-icons/fi";
 
+import useCursorStore from "../../store/useCursorStore";
+
 export const SocialIcons = ({ className = "", hoverBg = "#E0FF4F", hoverText = "#000", border = "border-white/30" }) => {
+  const { setCursorType, resetCursor } = useCursorStore();
+
   const containerVariants = {
     hidden: {},
     show: { transition: { staggerChildren: 0.1 } }
@@ -34,6 +38,8 @@ export const SocialIcons = ({ className = "", hoverBg = "#E0FF4F", hoverText = "
           aria-label={label}
           target="_blank"
           rel="noopener noreferrer"
+          onMouseEnter={() => setCursorType("hover")}
+          onMouseLeave={resetCursor}
           whileHover={{ scale: 1.1, backgroundColor: hoverBg, color: hoverText, borderColor: hoverBg }}
           className={`w-12 h-12 md:w-14 md:h-14 rounded-full border ${border} flex items-center justify-center transition-colors duration-300 z-20`}
           style={{ color: "inherit" }}

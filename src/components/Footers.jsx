@@ -1,3 +1,5 @@
+"use client";
+
 import { MagneticButton } from "./ui/MagneticButton";
 import { SocialIcons } from "./ui/SocialIcons";
 import { useRef, useState, useEffect } from "react";
@@ -198,6 +200,7 @@ export const FooterMinimalistMono = () => (
     decorColor="border-black/20"
   />
 );
+
 
 
 

@@ -1,5 +1,7 @@
+"use client";
+
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useVelocity, useSpring, useAnimationFrame, useMotionValue } from "framer-motion";
 import { 
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiFramer, 
   SiPython, SiFastapi, SiNodedotjs, SiPostgresql, SiRedis, 
@@ -35,20 +37,50 @@ const RepeatedItems = ({ items }) => (
   </div>
 );
 
-const MarqueeRow = ({ items, direction = "left", speed = 20 }) => {
+const wrap = (min, max, v) => {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+};
+
+const MarqueeRow = ({ items, direction = "left", baseVelocity = 2 }) => {
+  const baseX = useMotionValue(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400
+  });
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false
+  });
+
+  const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
+  const directionFactor = useRef(direction === "left" ? -1 : 1);
+
+  useAnimationFrame((t, delta) => {
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+    
+    // Add velocity-based speed boost
+    let speedMult = Math.abs(velocityFactor.get());
+    moveBy += directionFactor.current * speedMult * (delta / 1000) * 10; 
+
+    baseX.set(baseX.get() + moveBy);
+  });
+
   const repeatedItems = [...items, ...items, ...items];
+  
   return (
     <div className="flex w-full overflow-hidden whitespace-nowrap relative py-2 md:py-4">
       <div className="absolute left-0 top-0 w-20 md:w-40 h-full bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 w-20 md:w-40 h-full bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
       
-      <div 
+      <motion.div 
         className="flex w-max"
-        style={{ animation: `marquee-${direction} ${speed}s linear infinite` }}
+        style={{ x }}
       >
         <RepeatedItems items={repeatedItems} />
         <RepeatedItems items={repeatedItems} />
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -160,3 +192,4 @@ export default function About() {
     </section>
   );
 }
+

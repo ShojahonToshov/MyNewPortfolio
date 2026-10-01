@@ -1,6 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import useCursorStore from "../../store/useCursorStore";
 
 export function MagneticButton({ children, className, href, as, onClick, ...props }) {
   const ref = useRef(null);
@@ -13,8 +14,11 @@ export function MagneticButton({ children, className, href, as, onClick, ...prop
   const springX = useSpring(x, springConfig);
   const springY = useSpring(y, springConfig);
 
+  const { setCursorType, resetCursor } = useCursorStore();
+
   const handleMouseEnter = () => {
     bounds.current = ref.current.getBoundingClientRect();
+    setCursorType('hover');
   };
 
   const handleMouse = (e) => {
@@ -31,6 +35,7 @@ export function MagneticButton({ children, className, href, as, onClick, ...prop
     x.set(0);
     y.set(0);
     bounds.current = null;
+    resetCursor();
   };
 
   const Component = as || (href ? motion.a : motion.button);

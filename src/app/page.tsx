@@ -1,75 +1,18 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import dynamic from 'next/dynamic';
-import Lenis from "lenis";
-
 import CustomCursor from "../components/CustomCursor";
 import HeroVariantsSwitcher from "../components/HeroVariants";
 import FloatingNavbar from "../components/FloatingNavbar";
 import EntryExperience from "../components/EntryExperience";
-
-const StickyStack = dynamic(() => import("../components/StickyStack"), { ssr: false });
-const FooterMinimalistMono = dynamic(() => import("../components/Footers").then(m => m.FooterMinimalistMono), { ssr: false });
-const About = dynamic(() => import("../components/About"), { ssr: false });
+import StickyStack from "../components/StickyStack";
+import { FooterMinimalistMono } from "../components/Footers";
+import About from "../components/About";
 
 export default function Home() {
-  const containerRef = useRef(null);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-
-  useEffect(() => {
-    // FIX: Уничтожаем старые Service Worker-ы и кэши от других проектов на localhost
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then((registrations) => {
-        for (let registration of registrations) {
-          registration.unregister();
-          console.log('Stray ServiceWorker unregistered!');
-        }
-      });
-    }
-    if ('caches' in window) {
-      caches.keys().then((names) => {
-        for (let name of names) {
-          caches.delete(name);
-          console.log('Cache cleared: ', name);
-        }
-      });
-    }
-
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouchDevice(isTouch);
-    
-    let lenis;
-    let frameId;
-    
-    if (!isTouch) {
-      lenis = new Lenis({ lerp: 0.05, smoothWheel: true });
-      window.lenis = lenis;
-      
-      function raf(time) {
-        lenis.raf(time);
-        frameId = requestAnimationFrame(raf);
-      }
-      frameId = requestAnimationFrame(raf);
-    }
-    
-    return () => { 
-      if (frameId) cancelAnimationFrame(frameId); 
-      if (lenis) {
-        lenis.destroy(); 
-        delete window.lenis;
-      }
-    };
-  }, []);
-
   return (
-    <div ref={containerRef} className="bg-[#0a0a0a] text-white min-h-[300vh] font-sans selection:bg-white selection:text-black overflow-clip relative">
+    <div className="bg-[#0a0a0a] text-white min-h-[300vh] font-sans selection:bg-white selection:text-black overflow-clip relative">
       <EntryExperience>
-        {!isTouchDevice && (
-          <div className="hidden md:block">
-             <CustomCursor />
-          </div>
-        )}
+        <div className="hidden md:block">
+           <CustomCursor />
+        </div>
         <FloatingNavbar />
         <HeroVariantsSwitcher />
         <About />

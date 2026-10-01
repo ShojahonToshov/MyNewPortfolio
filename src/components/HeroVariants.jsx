@@ -1,3 +1,5 @@
+"use client";
+
 import { MagneticButton } from "./ui/MagneticButton";
 import { SocialIcons } from "./ui/SocialIcons";
 import { useEffect, useRef } from "react";
@@ -225,5 +227,6 @@ export default function HeroVariantsSwitcher() {
     </section>
   );
 }
+
 
 

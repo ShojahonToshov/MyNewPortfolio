@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useEffect } from "react";
 import { PROJECTS_DATA } from "../constants/data";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
@@ -7,7 +9,10 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 const angle = 360 / PROJECTS_DATA.length;
 
+import useCursorStore from "../store/useCursorStore";
+
 const Card = ({ proj, i, wheelRotateX }) => {
+  const { setCursorType, resetCursor } = useCursorStore();
   const itemAngle = -i * angle;
   
   // Calculate the linear rotation of this card in the viewport
@@ -24,8 +29,13 @@ const Card = ({ proj, i, wheelRotateX }) => {
   // Slightly scale down cards that are not in the direct front focus
   const scale = useTransform(absAngle, [-90, 0, 90], [0.8, 1, 0.8]);
 
+  // Parallax effect for the image inside the card
+  const imageY = useTransform(absAngle, [-90, 0, 90], ["-20%", "0%", "20%"]);
+
   return (
     <motion.div 
+      onMouseEnter={() => setCursorType('text', 'View')}
+      onMouseLeave={resetCursor}
       className="absolute top-1/2 left-1/2 flex flex-col md:flex-row w-[90vw] md:w-[70vw] max-w-6xl h-[60vh] md:h-[70vh] rounded-[40px] bg-[#111] overflow-hidden shadow-[0_40px_80px_rgba(0,0,0,0.6)] border border-white/10 group origin-center cursor-pointer"
       style={{
         transformStyle: "preserve-3d",
@@ -74,7 +84,9 @@ const Card = ({ proj, i, wheelRotateX }) => {
       
       {/* Image Area */}
       <div className="w-full md:w-1/2 h-full absolute md:relative inset-0 md:inset-auto bg-black overflow-hidden">
-        <Image src={`${proj.img}&fm=webp&q=75`} alt={proj.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-50 md:opacity-80 transition-transform duration-1000 group-hover:scale-110" />
+        <motion.div style={{ y: imageY }} className="absolute inset-x-0 -top-[20%] -bottom-[20%] w-full h-[140%]">
+          <Image src={`${proj.img}&fm=webp&q=75`} alt={proj.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-50 md:opacity-80 transition-transform duration-1000 group-hover:scale-110" />
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-[#111] via-[#111]/30 to-transparent opacity-0 md:opacity-100 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-[#111]/80 to-transparent md:hidden pointer-events-none" />
       </div>
@@ -199,4 +211,5 @@ export default function StickyStack() {
     </section>
   );
 }
+
 
