@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss, SiFramer, 
   SiPython, SiFastapi, SiNodedotjs, SiPostgresql, SiRedis, 
-  SiDocker, SiGraphql 
+  SiDocker, SiGraphql, SiJavascript 
 } from "react-icons/si";
 
 const frontendSkills = [
@@ -42,15 +42,13 @@ const MarqueeRow = ({ items, direction = "left", speed = 20 }) => {
       <div className="absolute left-0 top-0 w-20 md:w-40 h-full bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 w-20 md:w-40 h-full bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
       
-      <motion.div 
-        initial={{ x: direction === "left" ? "0%" : "-50%" }}
-        animate={{ x: direction === "left" ? "-50%" : "0%" }}
-        transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
+      <div 
         className="flex w-max"
+        style={{ animation: `marquee-${direction} ${speed}s linear infinite` }}
       >
         <RepeatedItems items={repeatedItems} />
         <RepeatedItems items={repeatedItems} />
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -65,7 +63,7 @@ export default function About() {
   const yText = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   return (
-    <section ref={containerRef} className="relative w-full min-h-screen bg-[#0a0a0a] text-white flex flex-col justify-center overflow-hidden pt-32 pb-16 z-10 border-t border-white/10" id="about">
+    <section ref={containerRef} className="relative w-full min-h-screen bg-white text-black flex flex-col justify-center overflow-hidden pt-32 pb-16 z-10 border-t border-black/10" id="about">
       
       {/* Background Glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
@@ -79,30 +77,30 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-sm font-bold uppercase tracking-widest text-white/50 mb-6 flex items-center gap-4"
+            className="text-sm font-bold uppercase tracking-widest text-black/50 mb-6 flex items-center gap-4"
           >
-            <span className="w-12 h-[1px] bg-white/50"></span>
-            Who I Am
+            <span className="w-12 h-[1px] bg-black/50"></span>
+            Expertise
           </motion.p>
           
           <motion.div style={{ y: yText }}>
             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
               Fullstack <br />
-              <span className="text-transparent" style={{ WebkitTextStroke: "1px white" }}>Engineer.</span>
+              <span className="text-transparent" style={{ WebkitTextStroke: "1px black" }}>Developer.</span>
             </h2>
-            <div className="text-lg md:text-xl text-white/70 space-y-6 font-medium leading-relaxed">
+            <div className="text-lg md:text-xl text-black/70 space-y-6 font-medium leading-relaxed">
               <p>
-                I architect digital ecosystems that bridge the gap between robust backend logic and seamless frontend interactions. It's not just about writing code—it's about engineering scalable, high-performance solutions.
+                I build scalable web applications designed to drive real business results. My focus is on creating seamless digital products that engage users, optimize workflows, and deliver measurable value from day one.
               </p>
               <p>
-                From designing complex API gateways in Python to crafting pixel-perfect, interactive UI experiences with React and Next.js, I ensure every layer of the stack serves a purpose. Modern problems require bleeding-edge technology.
+                From high-conversion React and Next.js interfaces to rock-solid Python backends, I take ownership of the entire development lifecycle. I help forward-thinking companies turn complex ideas into fast, reliable, and market-ready solutions.
               </p>
             </div>
           </motion.div>
         </div>
 
         {/* BENTO GRID STACK */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center text-white">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* Frontend Bento */}
@@ -113,7 +111,7 @@ export default function About() {
               className="bg-[#111] border border-white/10 rounded-3xl p-8 hover:bg-[#151515] hover:border-white/20 transition-all group shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <SiReact className="w-24 h-24" />
+                <SiJavascript className="w-24 h-24" />
               </div>
               <h3 className="text-white/50 text-sm font-bold uppercase tracking-widest mb-8 relative z-10">Frontend</h3>
               <div className="flex flex-wrap gap-3 relative z-10">
@@ -154,7 +152,7 @@ export default function About() {
       </div>
 
       {/* Infinite Marquee - Runs across the full width below the grids */}
-      <div className="mt-32 w-full flex flex-col gap-4 border-y border-white/5 py-12 bg-black/30 backdrop-blur-sm relative z-10">
+      <div className="mt-32 w-full flex flex-col gap-4 border-y border-black/10 py-12 bg-[#0a0a0a] relative z-10">
         <MarqueeRow items={frontendSkills} direction="left" speed={60} />
         <MarqueeRow items={backendSkills} direction="right" speed={60} />
       </div>

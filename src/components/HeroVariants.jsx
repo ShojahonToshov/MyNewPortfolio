@@ -13,6 +13,7 @@ const NameCorner = ({ mixBlend = "mix-blend-normal", delay = 0.5 }) => (
 
 export function MagneticButton({ children, className, href, ...props }) {
   const ref = useRef(null);
+  const bounds = useRef(null);
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -21,9 +22,14 @@ export function MagneticButton({ children, className, href, ...props }) {
   const springX = useSpring(x, springConfig);
   const springY = useSpring(y, springConfig);
 
+  const handleMouseEnter = () => {
+    bounds.current = ref.current.getBoundingClientRect();
+  };
+
   const handleMouse = (e) => {
+    if (!bounds.current) return;
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const { height, width, left, top } = bounds.current;
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
     x.set(middleX * 0.3);
@@ -33,12 +39,14 @@ export function MagneticButton({ children, className, href, ...props }) {
   const reset = () => {
     x.set(0);
     y.set(0);
+    bounds.current = null;
   };
 
   return (
     <motion.a
       href={href || "#"}
       ref={ref}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
       style={{ x: springX, y: springY }}
@@ -74,14 +82,23 @@ const MouseGlow = ({ color1, color2 }) => {
   const mouseY = useMotionValue(-500);
   
   useEffect(() => {
+    let bounds = null;
+    const updateBounds = () => {
+      bounds = glowRef.current?.offsetParent?.getBoundingClientRect();
+    };
+    updateBounds();
+    window.addEventListener("resize", updateBounds);
+
     const handleMouseMove = (e) => {
-      const bounds = glowRef.current?.offsetParent?.getBoundingClientRect();
       if (!bounds) return;
       mouseX.set(e.clientX - bounds.left - 500);
       mouseY.set(e.clientY - bounds.top - 500);
     };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("resize", updateBounds);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, [mouseX, mouseY]);
 
   return (

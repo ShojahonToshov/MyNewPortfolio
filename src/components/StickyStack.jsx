@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { PROJECTS_DATA } from "../constants/data";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import { MagneticButton } from "./Footers";
@@ -74,7 +74,7 @@ const Card = ({ proj, i, wheelRotateX }) => {
       {/* Image Area */}
       <div className="w-full md:w-1/2 h-full absolute md:relative inset-0 md:inset-auto bg-black overflow-hidden">
         <img 
-          src={proj.img} 
+          src={`${proj.img}&fm=webp`} 
           alt={proj.title} 
           loading="lazy"
           decoding="async"
@@ -113,15 +113,32 @@ export default function StickyStack() {
   const mouseX = useMotionValue(-500);
   const mouseY = useMotionValue(-500);
 
-  function handleMouseMove({ currentTarget, clientX, clientY }) {
-    let { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left - 500);
-    mouseY.set(clientY - top - 500);
+  const sectionRef = useRef(null);
+  const bounds = useRef({ left: 0, top: 0 });
+
+  useEffect(() => {
+    const updateBounds = () => {
+      if (sectionRef.current) {
+        bounds.current = {
+          left: sectionRef.current.offsetLeft,
+          top: sectionRef.current.offsetTop
+        };
+      }
+    };
+    updateBounds();
+    window.addEventListener("resize", updateBounds);
+    return () => window.removeEventListener("resize", updateBounds);
+  }, []);
+
+  function handleMouseMove({ pageX, pageY }) {
+    mouseX.set(pageX - bounds.current.left - 500);
+    mouseY.set(pageY - bounds.current.top - 500);
   }
 
   return (
     <section 
       id="projects"
+      ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="w-full bg-[#fcfcfc] font-sans z-10 relative overflow-clip"
     >

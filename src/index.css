@@ -26,6 +26,21 @@
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+@keyframes spin-z {
+  from { transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(0deg); }
+  to { transform: rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(360deg); }
+}
+
+@keyframes marquee-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
 /* Global Scrollbar Hide */
 html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;

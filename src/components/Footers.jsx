@@ -1,10 +1,11 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { FiGithub as Github, FiLinkedin as Linkedin, FiMail as Mail, FiTwitter as Twitter, FiArrowUpRight as ArrowUpRight } from "react-icons/fi";
 
 // Common Magnetic Button (Refactored to anchor tag for semantic linking)
 export function MagneticButton({ children, className, href, ...props }) {
   const ref = useRef(null);
+  const bounds = useRef(null);
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -13,9 +14,14 @@ export function MagneticButton({ children, className, href, ...props }) {
   const springX = useSpring(x, springConfig);
   const springY = useSpring(y, springConfig);
 
+  const handleMouseEnter = () => {
+    bounds.current = ref.current.getBoundingClientRect();
+  };
+
   const handleMouse = (e) => {
+    if (!bounds.current) return;
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const { height, width, left, top } = bounds.current;
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
     x.set(middleX * 0.3);
@@ -25,12 +31,14 @@ export function MagneticButton({ children, className, href, ...props }) {
   const reset = () => {
     x.set(0);
     y.set(0);
+    bounds.current = null;
   };
 
   return (
     <motion.a
       href={href || "#"}
       ref={ref}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
       style={{ x: springX, y: springY }}
@@ -93,12 +101,27 @@ function MinimalistSplitBase({
   // GPU-Accelerated coordinates for the glow effect
   const mouseX = useMotionValue(-500);
   const mouseY = useMotionValue(-500);
+  const sectionRef = useRef(null);
 
-  function handleMouseMove({ currentTarget, clientX, clientY }) {
-    let { left, top } = currentTarget.getBoundingClientRect();
-    // Offset by 500 to center the 1000x1000px glow circle directly on the cursor
-    mouseX.set(clientX - left - 500);
-    mouseY.set(clientY - top - 500);
+  useEffect(() => {
+    const updateBounds = () => {
+      if (sectionRef.current) {
+        bounds.current = {
+          left: sectionRef.current.offsetLeft,
+          top: sectionRef.current.offsetTop
+        };
+      }
+    };
+    updateBounds();
+    window.addEventListener("resize", updateBounds);
+    return () => window.removeEventListener("resize", updateBounds);
+  }, []);
+
+  const bounds = useRef({ left: 0, top: 0 });
+
+  function handleMouseMove({ pageX, pageY }) {
+    mouseX.set(pageX - bounds.current.left - 500);
+    mouseY.set(pageY - bounds.current.top - 500);
   }
 
   const textContainer = {
@@ -113,6 +136,7 @@ function MinimalistSplitBase({
   return (
     <section 
       id="contact"
+      ref={sectionRef}
       onMouseMove={handleMouseMove}
       className="min-h-screen flex flex-col justify-end py-10 px-4 md:px-10 bg-[#111] overflow-hidden relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] group/section"
     >
